@@ -17,8 +17,8 @@ import { provider, useInstance } from 'react-ioc';
 import { Dashboard, Person } from '@mui/icons-material';
 import { PageLayoutViewStore } from './page-layout.view-store';
 import { useHistory } from 'react-router-dom';
-import { DashboardPath, toDashboardPath } from '../../../dashboard/_common/navigation/dashboard.paths';
-import { toUsersPath, UsersPath } from '../../../users/_common/navigation/users.paths';
+import { DashboardPath, toDashboardPath } from '@/app/dashboard/_common/navigation/dashboard.paths';
+import { toUsersPath, UsersPath } from '@/app/users/_common/navigation/users.paths';
 
 interface PageLayoutProps {
   title: React.ReactNode;

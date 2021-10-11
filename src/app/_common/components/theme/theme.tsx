@@ -3,7 +3,7 @@ import { useInstance } from 'react-ioc';
 import { observer } from 'mobx-react-lite';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import darkScrollbar from '@mui/material/darkScrollbar';
-import { ThemeDataStore } from '../../stores/theme.data-store';
+import { ThemeDataStore } from '@/app/_common/stores/theme.data-store';
 
 export const Theme: React.FC = observer(({ children }) => {
   const themeStore = useInstance(ThemeDataStore);
