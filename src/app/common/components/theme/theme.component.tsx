@@ -19,17 +19,17 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
-});
-
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: darkScrollbar(),
       },
     },
+  },
+});
+
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
   },
 });

@@ -1,11 +1,24 @@
-import { AppProviders } from './app.providers';
-import { Dashboard } from './features/dashboard/dashboard';
+import { lazy, Suspense } from 'react';
+import { provider } from 'react-ioc';
 import { Theme } from './common/components/theme/theme.component';
+import { ThemeDataStore } from './common/stores/theme.data-store';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-export const App = AppProviders(() => {
+const Dashboard = lazy(() => import('./features/dashboard/dashboard'));
+
+export const App = provider(
+  ThemeDataStore,
+  //
+)(() => {
   return (
     <Theme>
-      <Dashboard />
+      <Router>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route path="/" component={Dashboard} />
+          </Switch>
+        </Suspense>
+      </Router>
     </Theme>
   );
 });

@@ -1,5 +1,12 @@
+import Box from '@mui/material/Box';
 import { PageLayout } from '../../common/components/page-layout/page-layout';
 
-export const Dashboard = () => {
-  return <PageLayout title="Dashboard">Dashboard content here...</PageLayout>;
+const Dashboard = () => {
+  return (
+    <PageLayout title="Dashboard">
+      <Box sx={{ height: '500px' }}>Dashboard widgets:</Box>
+    </PageLayout>
+  );
 };
+
+export default Dashboard;
