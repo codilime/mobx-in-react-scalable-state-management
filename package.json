@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.4.16",
     "@craco/craco": "^6.3.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -15,6 +16,10 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "apollo-client-preset": "^1.0.8",
+    "apollo-server": "^3.3.0",
+    "graphql": "^15.6.1",
+    "merge-graphql-schemas": "^1.7.8",
     "mobx": "^6.3.3",
     "mobx-persist-store": "^1.0.4",
     "mobx-react-lite": "^3.2.1",
@@ -29,10 +34,13 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco start",
+    "start-backend": "nodemon --watch ./backend/server backend/server/index.mjs",
+    "start-frontend": "craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
+    "generate-graphql-types": "graphql-codegen",
+    "generate-graphql-types-watch": "graphql-codegen --watch",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "eslintConfig": {
@@ -54,8 +62,12 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.2.0",
+    "@graphql-codegen/typescript": "^2.2.2",
+    "@graphql-codegen/typescript-operations": "^2.1.6",
     "@types/qs": "^6.9.7",
     "@types/react-router-dom": "^5.3.1",
+    "nodemon": "^2.0.13",
     "prettier": "^2.4.1"
   }
 }

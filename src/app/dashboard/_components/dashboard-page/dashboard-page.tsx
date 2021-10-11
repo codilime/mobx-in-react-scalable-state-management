@@ -4,7 +4,7 @@ import { PageLayout } from '@/app/_common/components/page-layout/page-layout';
 export const DashboardPage = () => {
   return (
     <PageLayout title="Dashboard">
-      <Box sx={{ height: '500px' }}>Dashboard widgets:</Box>
+      <Box>My dashboard</Box>
     </PageLayout>
   );
 };

@@ -1,0 +1,5 @@
+type Dashboard {
+    id: ID!
+    name: String!
+    owner: User!
+}

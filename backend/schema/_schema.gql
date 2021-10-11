@@ -1,0 +1,10 @@
+type Query {
+    me: User!
+    dashboard: Dashboard!
+    allUsers: [User!]!
+    allDashboards: [Dashboard!]!
+}
+
+type Mutation {
+    createUser(firstName: String!, lastName: String!, email: String!): User!
+}
