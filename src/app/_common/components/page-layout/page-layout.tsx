@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -14,8 +14,11 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { observer } from 'mobx-react-lite';
 import { provider, useInstance } from 'react-ioc';
-import { Dashboard } from '@mui/icons-material';
+import { Dashboard, Person } from '@mui/icons-material';
 import { PageLayoutViewStore } from './page-layout.view-store';
+import { useHistory } from 'react-router-dom';
+import { DashboardPath, toDashboardPath } from '../../../dashboard/_common/navigation/dashboard.paths';
+import { toUsersPath, UsersPath } from '../../../users/_common/navigation/users.paths';
 
 interface PageLayoutProps {
   title: React.ReactNode;
@@ -27,6 +30,11 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
 )(
   observer(({ title, children }) => {
     const store = useInstance(PageLayoutViewStore);
+    const history = useHistory();
+
+    const goToDashboard = useCallback(() => history.push(toDashboardPath({ path: DashboardPath.MAIN })), [history]);
+    const goToUsers = useCallback(() => history.push(toUsersPath({ path: UsersPath.MAIN })), [history]);
+
     return (
       <div>
         <Box sx={{ flexGrow: 1 }}>
@@ -59,7 +67,13 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
                 <ListItemIcon>
                   <Dashboard />
                 </ListItemIcon>
-                <ListItemText primary="Dashboard" />
+                <ListItemText primary="Dashboard" onClick={goToDashboard} />
+              </ListItem>
+              <ListItem button key="Users">
+                <ListItemIcon>
+                  <Person />
+                </ListItemIcon>
+                <ListItemText primary="Users" onClick={goToUsers} />
               </ListItem>
             </List>
           </Box>
