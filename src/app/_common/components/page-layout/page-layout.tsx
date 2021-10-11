@@ -17,8 +17,7 @@ import { provider, useInstance } from 'react-ioc';
 import { Dashboard, Person } from '@mui/icons-material';
 import { PageLayoutViewStore } from './page-layout.view-store';
 import { useHistory } from 'react-router-dom';
-import { DashboardPath, toDashboardPath } from '@/app/dashboard/_common/navigation/dashboard.paths';
-import { toUsersPath, UsersPath } from '@/app/users/_common/navigation/users.paths';
+import { RootPaths } from '@/app/_common/navigation/root-paths';
 
 interface PageLayoutProps {
   title: React.ReactNode;
@@ -32,8 +31,8 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
     const store = useInstance(PageLayoutViewStore);
     const history = useHistory();
 
-    const goToDashboard = useCallback(() => history.push(toDashboardPath({ path: DashboardPath.MAIN })), [history]);
-    const goToUsers = useCallback(() => history.push(toUsersPath({ path: UsersPath.MAIN })), [history]);
+    const goToDashboard = useCallback(() => history.push(RootPaths.DASHBOARD), [history]);
+    const goToUsers = useCallback(() => history.push(RootPaths.USERS), [history]);
 
     return (
       <div>

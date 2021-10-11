@@ -1,20 +1,8 @@
-import qs from 'qs';
-import { generatePath } from 'react-router-dom';
+import { RootPaths } from '@/app/_common/navigation/root-paths';
+import { pathResolver } from '@/app/_common/navigation/path-resolver';
 
 export enum UsersPath {
-  MAIN = '/users',
+  MAIN = '',
 }
 
-interface UsersPathParams {
-  path: UsersPath;
-  params?: Record<string, unknown>;
-  search?: Record<string, unknown>;
-  hash?: Record<string, unknown>;
-}
-
-export function toUsersPath({ path, params, search, hash }: UsersPathParams) {
-  const generatedPath = params ? generatePath(path, params) : path;
-  const searchString = search ? qs.stringify(search, { addQueryPrefix: true }) : '';
-  const hashString = hash ? '#' + qs.stringify(hash) : '';
-  return `${generatedPath}${searchString}${hashString}`;
-}
+export const toUsersPath = pathResolver<UsersPath>(RootPaths.USERS);

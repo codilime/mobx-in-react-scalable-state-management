@@ -1,20 +1,8 @@
-import qs from 'qs';
-import { generatePath } from 'react-router-dom';
+import { RootPaths } from '@/app/_common/navigation/root-paths';
+import { pathResolver } from '@/app/_common/navigation/path-resolver';
 
 export enum DashboardPath {
-  MAIN = '/',
+  MAIN = '',
 }
 
-interface DashboardPathParams {
-  path: DashboardPath;
-  params?: Record<string, unknown>;
-  search?: Record<string, unknown>;
-  hash?: Record<string, unknown>;
-}
-
-export function toDashboardPath({ path, params, search, hash }: DashboardPathParams) {
-  const generatedPath = params ? generatePath(path, params) : path;
-  const searchString = search ? qs.stringify(search, { addQueryPrefix: true }) : '';
-  const hashString = hash ? '#' + qs.stringify(hash) : '';
-  return `${generatedPath}${searchString}${hashString}`;
-}
+export const toDashboardPath = pathResolver<DashboardPath>(RootPaths.DASHBOARD);
