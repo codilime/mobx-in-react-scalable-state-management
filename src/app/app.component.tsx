@@ -1,11 +1,11 @@
-import React from 'react';
+import { AppProviders } from './app.providers';
+import { Dashboard } from './features/dashboard/dashboard.component';
+import { ThemeProvider } from './common/components/theme-provider/theme-provider.component';
 
-function App() {
+export const App = AppProviders(() => {
   return (
-    <div>
-      <header>App Header</header>
-    </div>
+    <ThemeProvider>
+      <Dashboard />
+    </ThemeProvider>
   );
-}
-
-export default App;
+});
