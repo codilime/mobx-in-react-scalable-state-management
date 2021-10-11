@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { provider } from 'react-ioc';
-import { Theme } from './_common/components/theme/theme.component';
+import { Theme } from './_common/components/theme/theme';
 import { ThemeDataStore } from './_common/stores/theme.data-store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { DashboardPath, toDashboardPath } from './dashboard/_common/navigation/dashboard.paths';
