@@ -10,22 +10,24 @@ import {
 
 export class UsersDataStore extends GraphqlBaseDataStore<GetAllUsersQuery, GetAllUsersQueryVariables> {
   get users() {
-    return this.result.data?.allUsers;
+    return this.data?.allUsers;
   }
 
   constructor() {
-    super({ query: GetAllUsers });
-    makeObservable(this, {
-      users: computed,
-      create: action,
-    });
+    super();
+    makeObservable(this, { users: computed, create: action });
+    this.read();
   }
 
-  async create(user: CreateUserMutationVariables) {
+  read() {
+    this.query({ query: GetAllUsers, fetchPolicy: 'cache-and-network' });
+  }
+
+  async create(variables: CreateUserMutationVariables) {
     try {
-      await this.client.mutate<CreateUserMutation, CreateUserMutationVariables>({
+      await this.mutate<CreateUserMutation, CreateUserMutationVariables>({
         mutation: CreateUser,
-        variables: user,
+        variables: variables,
         refetchQueries: [{ query: GetAllUsers }],
       });
     } catch (e) {

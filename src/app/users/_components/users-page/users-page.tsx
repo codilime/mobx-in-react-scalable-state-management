@@ -18,9 +18,12 @@ export const UsersPage = observer(() => {
     [store],
   );
 
+  const refresh = useCallback(() => store.read(), [store]);
+
   return (
     <PageLayout title="Users">
       <Button onClick={addNewUser}>Add new user</Button>
+      <Button onClick={refresh}>Refresh</Button>
       <pre>{JSON.stringify(store.users, undefined, 2)}</pre>
     </PageLayout>
   );

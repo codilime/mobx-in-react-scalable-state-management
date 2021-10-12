@@ -1,27 +1,39 @@
-import { action, makeAutoObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { ApolloClient } from 'apollo-client-preset';
 import { WatchQueryOptions } from 'apollo-client/core/watchQueryOptions';
 
 export class QueryResult<RESULT, VARIABLES> {
   private subscription?: ReturnType<typeof apolloQueryToMobxObservable>['subscription'];
+  private queryWatcher?: ReturnType<typeof apolloQueryToMobxObservable>['queryWatcher'];
+  private queryOptions: WatchQueryOptions<VARIABLES> | null = null;
 
-  constructor(
-    private client: ApolloClient<{}>,
-    private queryOptions: Omit<WatchQueryOptions<VARIABLES>, 'variables'>,
-    private variables?: VARIABLES,
-  ) {
-    makeAutoObservable(this, {
+  constructor(private client: ApolloClient<{}>) {
+    makeObservable(this, {
       // @ts-ignore
-      client: false,
-      queryOptions: false,
+      result: computed,
+      error: computed,
+      loading: computed,
+      data: computed,
+      query: action,
+      queryOptions: observable.ref,
     });
   }
 
   private get result() {
     this.subscription?.unsubscribe();
-    const { result, subscription } = apolloQueryToMobxObservable(this.client, this.queryOptions, this.variables);
-    this.subscription = subscription;
-    return result;
+    if (this.queryOptions) {
+      const { result, subscription, queryWatcher } = apolloQueryToMobxObservable(this.client, this.queryOptions);
+      this.subscription = subscription;
+      // @ts-ignore
+      this.queryWatcher = queryWatcher;
+      return result;
+    } else {
+      return observable({
+        error: null,
+        loading: false,
+        data: null,
+      });
+    }
   }
 
   get error(): string | null {
@@ -32,12 +44,12 @@ export class QueryResult<RESULT, VARIABLES> {
     return this.result.loading;
   }
 
-  get data(): RESULT {
+  get data(): RESULT | null {
     return this.result.data;
   }
 
-  setVariables(variables: VARIABLES | undefined) {
-    this.variables = variables;
+  query(queryOptions: WatchQueryOptions<VARIABLES>) {
+    this.queryOptions = queryOptions;
   }
 
   dispose() {
@@ -45,25 +57,21 @@ export class QueryResult<RESULT, VARIABLES> {
   }
 }
 
-function apolloQueryToMobxObservable<VARIABLES>(
-  client: ApolloClient<{}>,
-  queryOptions: Omit<WatchQueryOptions<VARIABLES>, 'variables'>,
-  variables: VARIABLES | undefined,
-) {
-  const query = client.watchQuery({ ...queryOptions, variables });
-  const result = observable(query.currentResult());
+function apolloQueryToMobxObservable<VARIABLES>(client: ApolloClient<{}>, queryOptions: WatchQueryOptions<VARIABLES>) {
+  const queryWatcher = client.watchQuery(queryOptions);
+  const result = observable(queryWatcher.currentResult());
 
-  const subscription = query.subscribe({
-    next: action(function (value) {
+  const subscription = queryWatcher.subscribe({
+    next: action((value) => {
       result.error = undefined;
       result.loading = value.loading;
       result.data = value.data;
     }),
-    error: action(function (error) {
+    error: action((error) => {
       result.error = error;
       result.loading = false;
       result.data = undefined;
     }),
   });
-  return { result, subscription, query };
+  return { result, subscription, queryWatcher };
 }

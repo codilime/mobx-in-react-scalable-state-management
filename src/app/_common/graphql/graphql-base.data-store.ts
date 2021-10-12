@@ -1,13 +1,18 @@
 import { injectClass } from '@/app/_common/ioc/inject-class';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
-import { WatchQueryOptions } from 'apollo-client/core/watchQueryOptions';
+import { MutationOptions, WatchQueryOptions } from 'apollo-client/core/watchQueryOptions';
 import { computed, makeObservable } from 'mobx';
 import { QueryResult } from '@/app/_common/graphql/query-result';
 
-export class GraphqlBaseDataStore<RESULT, VARIABLES> {
-  protected client = injectClass(this, GraphqlClient);
+export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
+  private client = injectClass(this, GraphqlClient);
+  private result: QueryResult<QUERY_RESULT, QUERY_VARIABLES> = new QueryResult<QUERY_RESULT, QUERY_VARIABLES>(
+    this.client,
+  );
 
-  protected result: QueryResult<RESULT, VARIABLES> = new QueryResult<RESULT, VARIABLES>(this.client, this.queryOptions);
+  constructor() {
+    makeObservable(this, { loading: computed, error: computed, data: computed }, { autoBind: true });
+  }
 
   get loading() {
     return this.result.loading;
@@ -17,15 +22,18 @@ export class GraphqlBaseDataStore<RESULT, VARIABLES> {
     return this.result.error;
   }
 
-  constructor(private queryOptions: WatchQueryOptions<VARIABLES>) {
-    makeObservable(
-      this,
-      {
-        loading: computed,
-        error: computed,
-      },
-      { autoBind: true },
-    );
+  get data() {
+    return this.result.data;
+  }
+
+  protected query(queryOptions: WatchQueryOptions<QUERY_VARIABLES>) {
+    this.result.query(queryOptions);
+  }
+
+  protected async mutate<MUTATION_RESULT, MUTATION_VARIABLES>(
+    options: MutationOptions<MUTATION_RESULT, MUTATION_VARIABLES>,
+  ) {
+    return await this.client.mutate(options);
   }
 
   dispose() {
