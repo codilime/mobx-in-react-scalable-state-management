@@ -20,3 +20,9 @@ export const CreateUser = gql`
     }
   }
 `;
+
+export const DeleteUsers = gql`
+  mutation DeleteUsers($ids: [ID!]!) {
+    deleteUsers(ids: $ids)
+  }
+`;

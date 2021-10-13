@@ -9,16 +9,16 @@ export class PageLayoutViewStore {
     drawerOpened: false,
   };
 
+  constructor() {
+    makeAutoObservable(this, undefined, { autoBind: true });
+  }
+
   get drawerOpened() {
     return this.state.drawerOpened;
   }
 
   get theme() {
     return this.themeDataStore.theme;
-  }
-
-  constructor() {
-    makeAutoObservable(this, undefined, { autoBind: true });
   }
 
   openDrawer() {

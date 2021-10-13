@@ -6,28 +6,29 @@ import { QueryResult } from '@/app/_common/graphql/query-result';
 
 export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   private client = injectClass(this, GraphqlClient);
-  private result: QueryResult<QUERY_RESULT, QUERY_VARIABLES> = new QueryResult<QUERY_RESULT, QUERY_VARIABLES>(
-    this.client,
-  );
+
+  private state = {
+    result: new QueryResult<QUERY_RESULT, QUERY_VARIABLES>(this.client),
+  };
 
   constructor() {
     makeObservable(this, { loading: computed, error: computed, data: computed }, { autoBind: true });
   }
 
   get loading() {
-    return this.result.loading;
+    return this.state.result.loading;
   }
 
   get error() {
-    return this.result.error;
+    return this.state.result.error;
   }
 
   get data() {
-    return this.result.data;
+    return this.state.result.data;
   }
 
   protected query(queryOptions: WatchQueryOptions<QUERY_VARIABLES>) {
-    this.result.query(queryOptions);
+    this.state.result.query(queryOptions);
   }
 
   protected async mutate<MUTATION_RESULT, MUTATION_VARIABLES>(
@@ -37,6 +38,6 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   }
 
   dispose() {
-    this.result?.dispose();
+    this.state.result?.dispose();
   }
 }

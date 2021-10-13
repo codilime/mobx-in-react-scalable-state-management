@@ -6,10 +6,6 @@ export class ThemeDataStore {
     theme: 'dark',
   };
 
-  get theme() {
-    return this.state.theme;
-  }
-
   constructor() {
     makeAutoObservable(this);
     makePersistable(this.state, {
@@ -17,6 +13,10 @@ export class ThemeDataStore {
       properties: ['theme'],
       storage: window.localStorage,
     });
+  }
+
+  get theme() {
+    return this.state.theme;
   }
 
   setTheme(value: ThemeValue) {

@@ -4,7 +4,7 @@ import { resolve } from 'path';
 
 const typeDefs = mergeTypes(fileLoader(resolve('./backend/schema')));
 
-const users = [
+let users = [
   { id: 1, firstName: 'John', lastName: 'Doe', email: 'john.doe@foo.local' },
   { id: 2, firstName: 'Mary', lastName: 'Smith', email: 'mary.smith@foo.local' },
 ];
@@ -30,10 +30,14 @@ const resolvers = {
     allDashboards: () => dashboards,
   },
   Mutation: {
-    createUser: () => {
-      const newUser = { id: users.length + 1, firstName: 'Foo', lastName: 'Bar', email: 'foo@bar.com' };
+    createUser: (parent, user) => {
+      const newUser = { ...user, id: users.length + 1 };
       users.push(newUser);
       return newUser;
+    },
+    deleteUsers: (parent, { ids }) => {
+      users = users.filter((user) => !ids.includes(user.id.toString()));
+      return true;
     },
   },
   Dashboard: {

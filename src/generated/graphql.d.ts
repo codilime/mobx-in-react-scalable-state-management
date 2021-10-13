@@ -21,6 +21,7 @@ export type Dashboard = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
+  deleteUsers?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -28,6 +29,11 @@ export type MutationCreateUserArgs = {
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+};
+
+
+export type MutationDeleteUsersArgs = {
+  ids: Array<Scalars['ID']>;
 };
 
 export type Query = {
@@ -59,3 +65,10 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string } };
+
+export type DeleteUsersMutationVariables = Exact<{
+  ids: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type DeleteUsersMutation = { __typename?: 'Mutation', deleteUsers?: boolean | null | undefined };

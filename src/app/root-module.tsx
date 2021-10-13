@@ -5,6 +5,8 @@ import { ThemeDataStore } from '@/app/_common/stores/theme.data-store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { RootPaths } from '@/app/_common/navigation/root-paths';
 import { Theme } from '@/app/_common/components/theme/theme';
+import { AppToast } from '@/app/_components/app-toast/app-toast';
+import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 
 const DashboardModule = lazy(() => import('./dashboard/dashboard-module'));
 const UsersModule = lazy(() => import('./users/users-module'));
@@ -22,6 +24,7 @@ class RootModuleComponent extends React.Component {
             </Switch>
           </Suspense>
         </Router>
+        <AppToast />
       </Theme>
     );
   }
@@ -30,5 +33,6 @@ class RootModuleComponent extends React.Component {
 export const RootModule = provider(
   GraphqlClient,
   ThemeDataStore,
+  AppToastViewStore,
   //
 )(RootModuleComponent);
