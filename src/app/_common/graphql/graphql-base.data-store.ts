@@ -10,12 +10,10 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   private queryWatcher?: ObservableQuery<QUERY_RESULT, QUERY_VARIABLES>;
   private subscription?: ZenObservable.Subscription;
 
-  private state: State<QUERY_RESULT> = {
-    result: {
-      loading: false,
-      error: undefined,
-      data: undefined,
-    },
+  private result: Result<QUERY_RESULT> = {
+    loading: false,
+    error: undefined,
+    data: undefined,
   };
 
   constructor() {
@@ -42,15 +40,15 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   }
 
   get loading() {
-    return this.state.result.loading;
+    return this.result.loading;
   }
 
   get error() {
-    return this.state.result.error;
+    return this.result.error;
   }
 
   get data() {
-    return this.state.result.data;
+    return this.result.data;
   }
 
   protected query(queryOptions: WatchQueryOptions<QUERY_VARIABLES>) {
@@ -64,9 +62,9 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
     assertValue(this.queryWatcher);
 
     const currentResult = observable(this.queryWatcher.currentResult());
-    this.state.result.loading = currentResult.loading;
-    this.state.result.error = currentResult.error;
-    this.state.result.data = isEmpty(currentResult.data) ? undefined : (currentResult.data as QUERY_RESULT);
+    this.result.loading = currentResult.loading;
+    this.result.error = currentResult.error;
+    this.result.data = isEmpty(currentResult.data) ? undefined : (currentResult.data as QUERY_RESULT);
 
     // Do not show subscription in Redux DevTools
     Object.defineProperty(this, 'subscription', {
@@ -85,15 +83,15 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   }
 
   private onSuccess(data: QUERY_RESULT, loading: boolean) {
-    this.state.result.error = undefined;
-    this.state.result.loading = loading;
-    this.state.result.data = data;
+    this.result.error = undefined;
+    this.result.loading = loading;
+    this.result.data = data;
   }
 
-  private onFailure(error: State<QUERY_RESULT>['result']['error']) {
-    this.state.result.error = error;
-    this.state.result.loading = false;
-    this.state.result.data = undefined;
+  private onFailure(error: Result<QUERY_RESULT>['error']) {
+    this.result.error = error;
+    this.result.loading = false;
+    this.result.data = undefined;
   }
 
   dispose() {
@@ -101,12 +99,10 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   }
 }
 
-interface State<QUERY_RESULT> {
-  result: {
-    loading: boolean;
-    error?: ApolloCurrentResult<QUERY_RESULT>['error'];
-    data?: QUERY_RESULT;
-  };
+interface Result<QUERY_RESULT> {
+  loading: boolean;
+  error?: ApolloCurrentResult<QUERY_RESULT>['error'];
+  data?: QUERY_RESULT;
 }
 
 function assertValue(value: unknown): asserts value {
