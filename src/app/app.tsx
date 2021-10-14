@@ -1,6 +1,6 @@
 import React from 'react';
-import { RootModule } from './root-module';
+import { AppModule } from './app-module';
 
 export const App = () => {
-  return <RootModule />;
+  return <AppModule />;
 };

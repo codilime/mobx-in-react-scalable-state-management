@@ -11,28 +11,28 @@ import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 const DashboardModule = lazy(() => import('./dashboard/dashboard-module'));
 const UsersModule = lazy(() => import('./users/users-module'));
 
-// When we want to register services from descendant modules in RootModule - it must be a class :(
-class RootModuleComponent extends React.Component {
-  render() {
-    return (
-      <Theme>
-        <Router>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Switch>
-              <Route key="users" exact path={RootPaths.USERS} component={UsersModule} />
-              <Route key="dashboards" path={RootPaths.DASHBOARD} component={DashboardModule} />
-            </Switch>
-          </Suspense>
-        </Router>
-        <AppToast />
-      </Theme>
-    );
-  }
-}
-
-export const RootModule = provider(
+export const AppModule = provider(
   GraphqlClient,
   ThemeDataStore,
   AppToastViewStore,
   //
-)(RootModuleComponent);
+)(
+  // When we want to register services from descendant modules in RootModule - it must be a class :(
+  class AppModuleComponent extends React.Component {
+    render() {
+      return (
+        <Theme>
+          <Router>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Switch>
+                <Route key="users" exact path={RootPaths.USERS} component={UsersModule} />
+                <Route key="dashboards" path={RootPaths.DASHBOARD} component={DashboardModule} />
+              </Switch>
+            </Suspense>
+          </Router>
+          <AppToast />
+        </Theme>
+      );
+    }
+  },
+);
