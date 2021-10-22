@@ -29,7 +29,7 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
         error: computed,
         data: computed,
         // @ts-ignore
-        state: observable,
+        result: observable,
         query: action,
         onSuccess: action,
         onFailure: action,
