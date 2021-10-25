@@ -5,7 +5,7 @@ import { CreateUserMutationVariables } from '@/generated/graphql';
 import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
-export class UsersPageViewStore {
+export class UsersListViewStore {
   private usersDataStore = injectClass(this, UsersDataStore);
   private appToastViewStore = injectClass(this, AppToastViewStore);
 
@@ -57,3 +57,5 @@ export class UsersPageViewStore {
 interface State {
   selectionModel: GridSelectionModel;
 }
+
+export type UserRow = UsersListViewStore['users'][0];

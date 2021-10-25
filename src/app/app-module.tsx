@@ -25,7 +25,7 @@ export const AppModule = provider(
           <Router>
             <Suspense fallback={<div>Loading...</div>}>
               <Switch>
-                <Route key="users" exact path={RootPaths.USERS} component={UsersModule} />
+                <Route key="users" path={RootPaths.USERS} component={UsersModule} />
                 <Route key="dashboards" path={RootPaths.DASHBOARD} component={DashboardModule} />
               </Switch>
             </Suspense>

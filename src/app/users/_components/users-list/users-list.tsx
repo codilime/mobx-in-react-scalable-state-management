@@ -1,17 +1,19 @@
 import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
-import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 import { provider, useInstance } from 'react-ioc';
+import Button from '@mui/material/Button';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { PageLayout } from '@/app/_common/components/page-layout/page-layout';
-import { UsersPageViewStore } from '@/app/users/_components/users-page/users-page.view-store';
+import { UserRow, UsersListViewStore } from '@/app/users/_components/users-list/users-list.view-store';
+import { toUsersPath, UsersPath } from '@/app/users/_common/navigation/users.paths';
 
-export const UsersPage = provider(
-  UsersPageViewStore,
+export const UsersList = provider(
+  UsersListViewStore,
   //
 )(
   observer(() => {
-    const store = useInstance(UsersPageViewStore);
+    const store = useInstance(UsersListViewStore);
 
     const addNewUser = useCallback(async () => {
       const success = await store.create({
@@ -66,5 +68,8 @@ const columns: GridColDef[] = [
     field: 'email',
     headerName: 'Email',
     width: 200,
+    renderCell: ({ row, value }) => (
+      <Link to={toUsersPath({ path: UsersPath.DETAILS, params: { id: (row as UserRow).id } })}>{value}</Link>
+    ),
   },
 ];
