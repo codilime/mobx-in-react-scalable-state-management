@@ -1,8 +1,8 @@
 import { isEmpty, isNil } from 'lodash';
 import remotedev from 'mobx-remotedev';
-import { injectClass } from '@/app/_common/ioc/inject-class';
+import { injectInterface } from '@/app/_common/ioc/inject-interface';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { makeAutoObservable, observable } from 'mobx';
 import { ApolloCurrentResult, MutationOptions, ObservableQuery, WatchQueryOptions } from 'apollo-client';
 
 export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
@@ -19,23 +19,10 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   constructor() {
     // Do not show client in Redux DevTools
     Object.defineProperty(this, 'client', {
-      value: injectClass(this, GraphqlClient),
+      value: injectInterface(this, GraphqlClient),
       enumerable: false,
     });
-    makeObservable(
-      this,
-      {
-        loading: computed,
-        error: computed,
-        data: computed,
-        // @ts-ignore
-        result: observable,
-        query: action,
-        onSuccess: action,
-        onFailure: action,
-      },
-      { autoBind: true },
-    );
+    makeAutoObservable(this, undefined, { autoBind: true });
     remotedev(this, { name: this.constructor.name });
   }
 

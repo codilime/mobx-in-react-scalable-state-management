@@ -45,6 +45,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --max-warnings=0",
+    "lint:fix": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "generate-graphql-types": "graphql-codegen",
     "generate-graphql-types-watch": "graphql-codegen --watch",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
@@ -52,8 +54,15 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "no-console": "warn",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -73,6 +82,8 @@
     "@graphql-codegen/typescript-operations": "^2.1.6",
     "@types/qs": "^6.9.7",
     "@types/react-router-dom": "^5.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.13",
     "prettier": "^2.4.1"
   }

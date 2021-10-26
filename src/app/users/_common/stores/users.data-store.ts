@@ -34,6 +34,7 @@ export class UsersDataStore extends GraphqlBaseDataStore<GetAllUsersQuery, GetAl
       });
       return true;
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
       return false;
     }
@@ -47,6 +48,7 @@ export class UsersDataStore extends GraphqlBaseDataStore<GetAllUsersQuery, GetAl
         refetchQueries: [{ query: GetAllUsers }],
       });
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
       return false;
     }

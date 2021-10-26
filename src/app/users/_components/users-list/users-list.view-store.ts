@@ -1,13 +1,13 @@
 import { makeAutoObservable } from 'mobx';
-import { injectClass } from '@/app/_common/ioc/inject-class';
+import { injectInterface } from '@/app/_common/ioc/inject-interface';
 import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
 import { CreateUserMutationVariables } from '@/generated/graphql';
 import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
 export class UsersListViewStore {
-  private usersDataStore = injectClass(this, UsersDataStore);
-  private appToastViewStore = injectClass(this, AppToastViewStore);
+  private usersDataStore = injectInterface(this, UsersDataStore);
+  private appToastViewStore = injectInterface(this, AppToastViewStore);
 
   private state: State = {
     selectionModel: [],

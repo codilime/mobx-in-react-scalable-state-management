@@ -1,11 +1,9 @@
 import qs from 'qs';
-import { useInstance } from 'react-ioc';
-import { action, makeObservable, observable } from 'mobx';
-import { matchPath, useLocation, useRouteMatch } from 'react-router-dom';
-import { InjectionToken } from '@/app/_common/ioc/injection-token';
 import { useCallback, useEffect, useRef } from 'react';
+import { makeAutoObservable } from 'mobx';
+import { matchPath, useLocation, useRouteMatch } from 'react-router-dom';
 
-export class LocationStore<PROPS extends LocationProps = {}> {
+export class LocationStore<PROPS extends LocationProps = AnyObject> {
   private state: State = {
     path: '',
     pathname: '',
@@ -15,11 +13,7 @@ export class LocationStore<PROPS extends LocationProps = {}> {
   };
 
   constructor() {
-    makeObservable(this, {
-      // @ts-ignore
-      state: observable,
-      setState: action,
-    });
+    makeAutoObservable(this, undefined, { autoBind: true });
   }
 
   setState({ hash, path, pathname, search }: State) {
@@ -45,8 +39,10 @@ export class LocationStore<PROPS extends LocationProps = {}> {
   }
 }
 
-export const useSyncLocationStore = (locationStoreToken: InjectionToken<LocationStore<LocationProps>>) => {
-  const store = useInstance(locationStoreToken);
+/**
+ * Seamless synchronization of useLocation() and useRouteMatch() with LocationStore state
+ */
+export const useSyncLocationStore = (store: LocationStore) => {
   const { pathname, search, hash } = useLocation();
   const { path, isExact } = useRouteMatch();
   const firstTime = useRef(true);
@@ -68,9 +64,9 @@ export const useSyncLocationStore = (locationStoreToken: InjectionToken<Location
 };
 
 export interface LocationProps {
-  params?: {};
-  hash?: {};
-  search?: {};
+  params?: AnyObject;
+  hash?: AnyObject;
+  search?: AnyObject;
 }
 
 interface State {
@@ -80,3 +76,5 @@ interface State {
   hash: string;
   isExact: boolean;
 }
+
+type AnyObject = Record<string, unknown>;

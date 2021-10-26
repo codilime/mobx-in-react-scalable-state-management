@@ -15,7 +15,6 @@ export const AppModule = provider(
   GraphqlClient,
   ThemeDataStore,
   AppToastViewStore,
-  //
 )(
   // When we want to register services from descendant modules in RootModule - it must be a class :(
   class AppModuleComponent extends React.Component {
