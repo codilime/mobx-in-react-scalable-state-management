@@ -5,10 +5,10 @@ export enum DashboardPath {
   MAIN = '',
 }
 
+export const toDashboardPath = pathResolver<Paths>(RootPaths.DASHBOARD);
+
 type PathMain = {
   path: DashboardPath.MAIN;
 };
 
 type Paths = PathMain;
-
-export const toDashboardPath = pathResolver<Paths>(RootPaths.DASHBOARD);

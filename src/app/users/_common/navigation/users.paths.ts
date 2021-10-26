@@ -8,6 +8,10 @@ export enum UsersPath {
   DETAILS = '/:id',
 }
 
+export const toUsersPath = pathResolver<Paths>(RootPaths.USERS);
+
+export const UserDetailsLocationStore = createInjectionToken<LocationStore<PathDetails>>('UserDetailsLocationStore');
+
 type PathMain = {
   path: UsersPath.MAIN;
 };
@@ -18,7 +22,3 @@ type PathDetails = {
 };
 
 type Paths = PathMain | PathDetails;
-
-export const toUsersPath = pathResolver<Paths>(RootPaths.USERS);
-
-export const UserDetailsLocationStore = createInjectionToken<LocationStore<PathDetails>>('UserDetailsLocationStore');
