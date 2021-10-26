@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { InjectionToken } from '@/app/_common/ioc/injection-token';
 import { LocationStore, useSyncLocationStore } from '@/app/_common/stores/location.store';
 
-export function locationStoreProviderHOC(
+export function withLocationStoreProviderHOC(
   locationStoreInjectionToken: InjectionToken<LocationStore>,
   Component: React.ComponentType,
 ) {

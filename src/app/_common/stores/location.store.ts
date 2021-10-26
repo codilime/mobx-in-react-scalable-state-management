@@ -3,6 +3,7 @@ import { useInstance } from 'react-ioc';
 import { action, makeObservable, observable } from 'mobx';
 import { matchPath, useLocation, useRouteMatch } from 'react-router-dom';
 import { InjectionToken } from '@/app/_common/ioc/injection-token';
+import { useCallback, useEffect, useRef } from 'react';
 
 export class LocationStore<PROPS extends LocationProps = {}> {
   private state: State = {
@@ -48,7 +49,22 @@ export const useSyncLocationStore = (locationStoreToken: InjectionToken<Location
   const store = useInstance(locationStoreToken);
   const { pathname, search, hash } = useLocation();
   const { path, isExact } = useRouteMatch();
-  store.setState({ path, pathname, search, hash, isExact });
+  const firstTime = useRef(true);
+
+  const sync = useCallback(() => {
+    store.setState({ path, pathname, search, hash, isExact });
+  }, [hash, isExact, path, pathname, search, store]);
+
+  useEffect(() => {
+    if (!firstTime.current) {
+      sync();
+    }
+  }, [sync]);
+
+  if (firstTime.current) {
+    sync();
+    firstTime.current = false;
+  }
 };
 
 export interface LocationProps {
