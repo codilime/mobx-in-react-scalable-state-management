@@ -2,7 +2,7 @@ import { isEmpty, isNil } from 'lodash';
 import remotedev from 'mobx-remotedev';
 import { injectInterface } from '@/app/_common/ioc/inject-interface';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
-import { makeAutoObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { ApolloCurrentResult, MutationOptions, ObservableQuery, WatchQueryOptions } from 'apollo-client';
 
 export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
@@ -22,7 +22,21 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
       value: injectInterface(this, GraphqlClient),
       enumerable: false,
     });
-    makeAutoObservable(this, undefined, { autoBind: true });
+
+    makeObservable(
+      this,
+      {
+        loading: computed,
+        error: computed,
+        data: computed,
+        // @ts-ignore - for protected/private fields
+        result: observable,
+        query: action,
+        onSuccess: action,
+        onFailure: action,
+      },
+      { autoBind: true },
+    );
     remotedev(this, { name: this.constructor.name });
   }
 
