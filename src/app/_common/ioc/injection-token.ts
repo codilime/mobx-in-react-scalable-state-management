@@ -4,7 +4,7 @@ const ALL_TOKENS: Record<string, boolean> = {};
 
 export type InjectionToken<T> = Class<T>;
 
-export function createInjectionToken<T>(tokenName: string): InjectionToken<T> {
+export function createInjectionToken<T>(tokenName: string): Class<T> {
   if (!tokenName) {
     throw new Error('Please provide token name for easier debug.');
   }

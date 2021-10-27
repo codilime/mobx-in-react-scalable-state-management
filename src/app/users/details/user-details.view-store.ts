@@ -1,9 +1,9 @@
+import { autorun, makeAutoObservable } from 'mobx';
 import { injectInterface } from '@/app/_common/ioc/inject-interface';
 import { UserDetailsLocationStore } from '@/app/users/_common/navigation/users.paths';
-import { autorun, makeAutoObservable } from 'mobx';
 
 export class UserDetailsViewStore {
-  private readonly location = injectInterface(this, UserDetailsLocationStore);
+  private readonly locationStore = injectInterface(this, UserDetailsLocationStore);
   private readonly autorunDisposer?: ReturnType<typeof autorun>;
 
   constructor() {
@@ -15,7 +15,7 @@ export class UserDetailsViewStore {
   }
 
   get userId() {
-    return this.location.params.id;
+    return this.locationStore.params.id;
   }
 
   dispose() {
