@@ -62,17 +62,17 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
         <Drawer anchor="left" open={store.drawerOpened} onClose={store.closeDrawer}>
           <Box sx={{ width: 250 }} role="presentation" onClick={store.closeDrawer}>
             <List>
-              <ListItem button key="Dashboard">
+              <ListItem button key="Dashboard" onClick={goToDashboard}>
                 <ListItemIcon>
                   <Dashboard />
                 </ListItemIcon>
-                <ListItemText primary="Dashboard" onClick={goToDashboard} />
+                <ListItemText primary="Dashboard" />
               </ListItem>
-              <ListItem button key="Users">
+              <ListItem button key="Users" onClick={goToUsers}>
                 <ListItemIcon>
                   <Person />
                 </ListItemIcon>
-                <ListItemText primary="Users" onClick={goToUsers} />
+                <ListItemText primary="Users" />
               </ListItem>
             </List>
           </Box>
