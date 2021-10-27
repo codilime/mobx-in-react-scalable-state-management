@@ -7,6 +7,7 @@ import { RootPaths } from '@/app/_common/navigation/root-paths';
 import { Theme } from '@/app/_common/components/theme/theme';
 import { AppToast } from '@/app/_components/app-toast/app-toast';
 import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
+import { FullPageFallbackProgress } from '@/app/_common/components/full-page-fallback-progress/full-page-fallback-progress';
 
 const DashboardModule = lazy(() => import('./dashboard/dashboard-module'));
 const UsersModule = lazy(() => import('./users/users-module'));
@@ -16,13 +17,13 @@ export const AppModule = provider(
   ThemeDataStore,
   AppToastViewStore,
 )(
-  // When we want to register services from descendant modules in RootModule - it must be a class :(
+  // When we want to register services from descendant modules in RootModule - it must be a class (react-ioc limitation)
   class AppModuleComponent extends React.Component {
     render() {
       return (
         <Theme>
           <Router>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<FullPageFallbackProgress />}>
               <Switch>
                 <Route key="users" path={RootPaths.USERS} component={UsersModule} />
                 <Route key="dashboards" path={RootPaths.DASHBOARD} component={DashboardModule} />
