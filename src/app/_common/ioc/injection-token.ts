@@ -14,7 +14,7 @@ export function createInjectionToken<T>(tokenName: string): Class<T> {
   ALL_TOKENS[tokenName] = true;
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const token = (): T => {}; // token must be a function to proper working of `injectClass(this, TOKEN)` (react-ioc limitation)
+  const token = (): T => {}; // token must be a function to proper working of `inject(this, TOKEN)` (react-ioc limitation)
   token.displayName = tokenName;
   // @ts-ignore
   return token;
