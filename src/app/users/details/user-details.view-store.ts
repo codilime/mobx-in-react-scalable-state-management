@@ -1,9 +1,9 @@
 import { autorun, makeAutoObservable } from 'mobx';
-import { injectInterface } from '@/app/_common/ioc/inject-interface';
+import { inject } from 'react-ioc';
 import { UserDetailsLocationStore } from '@/app/users/_common/navigation/users.paths';
 
 export class UserDetailsViewStore {
-  private readonly locationStore = injectInterface(this, UserDetailsLocationStore);
+  private readonly locationStore = inject(this, UserDetailsLocationStore);
   private readonly autorunDisposer?: ReturnType<typeof autorun>;
 
   constructor() {

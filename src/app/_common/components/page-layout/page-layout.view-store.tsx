@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 import { ThemeDataStore } from '@/app/_common/stores/theme.data-store';
-import { injectInterface } from '@/app/_common/ioc/inject-interface';
+import { inject } from 'react-ioc';
 
 export class PageLayoutViewStore {
-  private themeDataStore = injectInterface(this, ThemeDataStore);
+  private themeDataStore = inject(this, ThemeDataStore);
 
   private state: State = {
     drawerOpened: false,

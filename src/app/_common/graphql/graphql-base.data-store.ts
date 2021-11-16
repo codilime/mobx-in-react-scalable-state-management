@@ -1,6 +1,6 @@
 import { isEmpty, isNil } from 'lodash';
 import remotedev from 'mobx-remotedev';
-import { injectInterface } from '@/app/_common/ioc/inject-interface';
+import { inject } from 'react-ioc';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
 import { action, computed, makeObservable, observable } from 'mobx';
 import { ApolloCurrentResult, MutationOptions, ObservableQuery, WatchQueryOptions } from 'apollo-client';
@@ -19,7 +19,7 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   constructor() {
     // Do not show client in Redux DevTools
     Object.defineProperty(this, 'client', {
-      value: injectInterface(this, GraphqlClient),
+      value: inject(this, GraphqlClient),
       enumerable: false,
     });
 
