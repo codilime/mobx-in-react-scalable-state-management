@@ -2,8 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { provider } from 'react-ioc';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
 import { ThemeDataStore } from '@/app/_common/stores/theme.data-store';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { RootPaths } from '@/app/_common/navigation/root-paths';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { moduleRootPath, RootPaths } from '@/app/_common/navigation/root-paths';
 import { Theme } from '@/app/_common/components/theme/theme';
 import { AppToast } from '@/app/_components/app-toast/app-toast';
 import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
@@ -24,10 +24,10 @@ export const AppModule = provider(
         <Theme>
           <Router>
             <Suspense fallback={<FullPageFallbackProgress />}>
-              <Switch>
-                <Route key="users" path={RootPaths.USERS} component={UsersModule} />
-                <Route key="dashboards" path={RootPaths.DASHBOARD} component={DashboardModule} />
-              </Switch>
+              <Routes>
+                <Route path={moduleRootPath(RootPaths.USERS)} element={<UsersModule />} />
+                <Route path={moduleRootPath(RootPaths.DASHBOARD)} element={<DashboardModule />} />
+              </Routes>
             </Suspense>
           </Router>
           <AppToast />

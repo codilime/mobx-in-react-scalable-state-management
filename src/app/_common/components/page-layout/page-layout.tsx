@@ -16,7 +16,7 @@ import { observer } from 'mobx-react-lite';
 import { provider, useInstance } from 'react-ioc';
 import { Dashboard, Person } from '@mui/icons-material';
 import { PageLayoutViewStore } from './page-layout.view-store';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RootPaths } from '@/app/_common/navigation/root-paths';
 
 interface PageLayoutProps {
@@ -29,10 +29,10 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
 )(
   observer(({ title, children }) => {
     const store = useInstance(PageLayoutViewStore);
-    const history = useHistory();
+    const navigate = useNavigate();
 
-    const goToDashboard = useCallback(() => history.push(RootPaths.DASHBOARD), [history]);
-    const goToUsers = useCallback(() => history.push(RootPaths.USERS), [history]);
+    const goToDashboard = useCallback(() => navigate(RootPaths.DASHBOARD), [navigate]);
+    const goToUsers = useCallback(() => navigate(RootPaths.USERS), [navigate]);
 
     return (
       <div>

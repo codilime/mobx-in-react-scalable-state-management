@@ -22,7 +22,7 @@ export const UsersList = provider(
         email: 'michael.jackson@foo.local',
       });
       if (success) {
-        // history.push(to new user details?)
+        // navigate(to new user details?)
       }
     }, [store]);
 
