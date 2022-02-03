@@ -24,7 +24,7 @@ export class AppToastViewStore {
     return this.state.severity;
   }
 
-  open(message: string, severity: State['severity'] = 'info') {
+  open(message: State['message'], severity: State['severity'] = 'info') {
     this.state.opened = true;
     this.state.message = message;
     this.state.severity = severity;
