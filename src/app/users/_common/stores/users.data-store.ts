@@ -1,56 +1,91 @@
-import { action, computed, makeObservable } from 'mobx';
-import { GraphqlBaseDataStore } from '@/app/_common/graphql/graphql-base.data-store';
-import { CreateUser, DeleteUsers, GetAllUsers } from '@/app/users/_common/stores/users.queries';
+import { inject } from 'react-ioc';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
 import {
-  CreateUserMutation,
-  CreateUserMutationVariables,
-  GetAllUsersQuery,
-  GetAllUsersQueryVariables,
-  DeleteUsersMutation,
-  DeleteUsersMutationVariables,
-} from '@/generated/graphql';
+  DeleteUsersRequestJTO,
+  GetUsersResponseJTO,
+  PostUserRequestJTO,
+} from '@/app/users/_common/remote-api/jto/users.jto';
 
-export class UsersDataStore extends GraphqlBaseDataStore<GetAllUsersQuery, GetAllUsersQueryVariables> {
+export class UsersDataStore {
+  private usersHttpService = inject(this, UsersHttpService);
+
+  private state: State = {
+    data: [] as GetUsersResponseJTO,
+    loading: false,
+  };
+
   constructor() {
-    super();
-    makeObservable(this, { users: computed, create: action });
-    this.read();
+    makeAutoObservable(this, undefined, { autoBind: true });
+    this.read(); // fetch data once the UsersDataStore has been created
   }
 
   get users() {
-    return this.data?.allUsers;
+    return this.state.data;
   }
 
-  read() {
-    this.query({ query: GetAllUsers, fetchPolicy: 'cache-and-network' });
+  get loading() {
+    return this.state.loading;
   }
 
-  async create(variables: CreateUserMutationVariables) {
+  get error() {
+    return this.state.error;
+  }
+
+  async read() {
+    this.state.loading = true;
     try {
-      await this.mutate<CreateUserMutation, CreateUserMutationVariables>({
-        mutation: CreateUser,
-        variables,
-        refetchQueries: [{ query: GetAllUsers }],
+      const response = await this.usersHttpService.getUsers();
+      runInAction(() => {
+        this.state.data = response;
+        this.state.error = undefined;
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.state.error = 'Connection error';
+      });
+    }
+    this.state.loading = false;
+  }
+
+  async create(user: PostUserRequestJTO) {
+    this.state.loading = true;
+    try {
+      const response = await this.usersHttpService.postUser(user);
+      runInAction(() => {
+        this.state.data.push(response);
+        this.state.error = undefined;
       });
       return true;
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e);
-      return false;
+      runInAction(() => {
+        this.state.error = 'Connection error';
+      });
     }
+    this.state.loading = false;
+    return false;
   }
 
-  async delete(variables: DeleteUsersMutationVariables) {
+  async delete(request: DeleteUsersRequestJTO) {
+    this.state.loading = true;
     try {
-      return await this.mutate<DeleteUsersMutation, DeleteUsersMutationVariables>({
-        mutation: DeleteUsers,
-        variables,
-        refetchQueries: [{ query: GetAllUsers }],
+      await this.usersHttpService.deleteUsers(request);
+      runInAction(() => {
+        this.state.data = this.state.data.filter((u) => request.ids.includes(u.id));
+        this.state.error = undefined;
       });
+      return true;
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e);
-      return false;
+      runInAction(() => {
+        this.state.error = 'Connection error';
+      });
     }
+    this.state.loading = false;
   }
 }
+
+type State = {
+  data: GetUsersResponseJTO;
+  loading: boolean;
+  error?: string;
+};

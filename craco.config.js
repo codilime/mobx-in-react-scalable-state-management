@@ -7,4 +7,12 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  devServer: (devServerConfig) => {
+    return {
+      ...devServerConfig,
+      proxy: {
+        '/api': 'http://localhost:4001',
+      },
+    };
+  },
 };

@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server';
 import { fileLoader, mergeTypes } from 'merge-graphql-schemas';
 import { resolve } from 'path';
+import express from 'express';
 
 const typeDefs = mergeTypes(fileLoader(resolve('./backend/schema')));
 
@@ -45,11 +46,22 @@ const resolvers = {
   },
 };
 
-const server = new ApolloServer({
+const graphQlserver = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+graphQlserver.listen().then(({ url }) => {
+  console.log(`🚀 GraphQL Server ready at ${url}`);
+});
+
+const expressServer = express();
+const expressPort = 4001;
+
+expressServer.get('/api/users', (req, res) => {
+  res.json(users);
+});
+
+expressServer.listen(expressPort, () => {
+  console.log(`🚀 GraphQL Server ready at http://localhost:${expressPort}`);
 });

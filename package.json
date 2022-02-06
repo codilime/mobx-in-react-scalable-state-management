@@ -22,6 +22,7 @@
     "@types/react-dom": "^17.0.11",
     "apollo-client-preset": "^1.0.8",
     "apollo-server": "^3.6.2",
+    "axios": "^0.25.0",
     "graphql": "^15.7.2",
     "lodash": "^4.17.21",
     "merge-graphql-schemas": "^1.7.8",
@@ -84,6 +85,7 @@
     "@types/react-router-dom": "^5.3.3",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "express": "^4.17.2",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1"
   }
