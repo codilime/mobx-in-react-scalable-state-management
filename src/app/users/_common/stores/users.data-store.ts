@@ -8,6 +8,7 @@ import {
   GetAllUsersQueryVariables,
   DeleteUsersMutation,
   DeleteUsersMutationVariables,
+  User,
 } from '@/generated/graphql';
 
 export class UsersDataStore extends GraphqlBaseDataStore<GetAllUsersQuery, GetAllUsersQueryVariables> {
@@ -23,6 +24,10 @@ export class UsersDataStore extends GraphqlBaseDataStore<GetAllUsersQuery, GetAl
 
   read() {
     this.query({ query: GetAllUsers, fetchPolicy: 'cache-and-network' });
+  }
+
+  findUserById(userId: User['id']) {
+    return this.users?.find((user) => user.id === userId) || null;
   }
 
   async create(variables: CreateUserMutationVariables) {
