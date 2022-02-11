@@ -44,13 +44,14 @@ export class UsersDataStore {
       runInAction(() => {
         this.state.data = response;
         this.state.error = undefined;
+        this.state.loading = false;
       });
     } catch (e) {
       runInAction(() => {
         this.state.error = 'Connection error';
+        this.state.loading = false;
       });
     }
-    this.state.loading = false;
   }
 
   async create(user: PostUserRequestJTO) {
@@ -60,14 +61,15 @@ export class UsersDataStore {
       runInAction(() => {
         this.state.data.push(response);
         this.state.error = undefined;
+        this.state.loading = false;
       });
       return true;
     } catch (e) {
       runInAction(() => {
         this.state.error = 'Connection error';
+        this.state.loading = false;
       });
     }
-    this.state.loading = false;
     return false;
   }
 
@@ -78,14 +80,15 @@ export class UsersDataStore {
       runInAction(() => {
         this.state.data = this.state.data.filter((u) => !request.ids.includes(u.id));
         this.state.error = undefined;
+        this.state.loading = false;
       });
       return true;
     } catch (e) {
       runInAction(() => {
         this.state.error = 'Connection error';
+        this.state.loading = false;
       });
     }
-    this.state.loading = false;
   }
 }
 
