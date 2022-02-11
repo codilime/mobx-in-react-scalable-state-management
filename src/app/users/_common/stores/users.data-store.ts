@@ -32,6 +32,10 @@ export class UsersDataStore {
     return this.state.error;
   }
 
+  findUserById(userId: User['id']) {
+    return this.users?.find((user) => user.id === userId) || null;
+  }
+
   async read() {
     this.state.loading = true;
     try {

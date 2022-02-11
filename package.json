@@ -33,6 +33,7 @@
     "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.27.0",
     "react-ioc": "^1.0.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
@@ -62,7 +63,8 @@
     "rules": {
       "no-console": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "off",
-      "@typescript-eslint/ban-ts-comment": "off"
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-empty-interface": "off"
     }
   },
   "browserslist": {
