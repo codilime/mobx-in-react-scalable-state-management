@@ -76,7 +76,7 @@ export class UsersDataStore {
     try {
       await this.usersHttpService.deleteUsers(request);
       runInAction(() => {
-        this.state.data = this.state.data.filter((u) => request.ids.includes(u.id));
+        this.state.data = this.state.data.filter((u) => !request.ids.includes(u.id));
         this.state.error = undefined;
       });
       return true;

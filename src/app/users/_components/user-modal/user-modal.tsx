@@ -18,6 +18,7 @@ export const UserModal = observer(() => {
 
 const UserForm = observer(() => {
   const store = useInstance(UserModalViewStore);
+
   const { control, handleSubmit, reset } = useForm<UserFormData>({ defaultValues: store.defaultValues });
 
   const onSubmit = useCallback(
