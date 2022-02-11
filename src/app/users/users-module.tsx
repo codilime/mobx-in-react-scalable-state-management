@@ -11,16 +11,16 @@ import { UserModalViewStore } from '@/app/users/_components/user-modal/user-moda
 import { AppModule } from '@/app/app-module';
 import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
 
-// If we want this store to survive even when we leave `/users` path and come back - then we should register it in AppModule
-// AppModule.register(UsersDataStore);
+// We use AppModule.register(...) here to use tree shaking (code splitting) for any src/app/users/**.* files
 AppModule.register(UsersHttpService);
+AppModule.register(UsersDataStore);
 
 // Convenient way to provide MobX *LocationStore with useSyncLocationStore() for component which depends on *LocationStore
 const UserDetailsWithLocation = withLocationStoreProviderHOC(UserDetailsLocationStore, UserDetails);
 
 const UsersModule = provider(
-  UsersDataStore,
   UserModalViewStore,
+  //
 )(
   observer(() => {
     return (

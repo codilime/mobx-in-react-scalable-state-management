@@ -1,4 +1,3 @@
-import { inject } from 'react-ioc';
 import { HttpClientService } from '@/app/_common/http/http-client.service';
 import {
   DeleteUsersRequestJTO,
@@ -8,7 +7,7 @@ import {
 } from '@/app/users/_common/remote-api/jto/users.jto';
 
 export class UsersHttpService {
-  private httpClient = inject(this, HttpClientService);
+  private httpClient = new HttpClientService();
 
   async getUsers() {
     return this.httpClient.get<GetUsersResponseJTO>('/users');
