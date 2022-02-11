@@ -45,6 +45,7 @@ const UserForm = observer(() => {
               fullWidth
               variant="standard"
               required
+              autoFocus
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
             />
