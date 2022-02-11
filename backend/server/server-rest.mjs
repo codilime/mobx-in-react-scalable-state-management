@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { serverState } from './server-state.mjs';
+import { serverState } from "./server-state.mjs";
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,14 +12,14 @@ app.get('/api/users', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
-  const newUser = { ...req.body, id: serverState.nextUserId() };
+  const newUser = {...req.body, id: serverState.nextUserId() };
   serverState.users.push(newUser);
   res.json(newUser);
 });
 
 app.put('/api/users/{id}', (req, res) => {
   const userId = req.params.id;
-  const user = serverState.users.find((u) => u.id === userId);
+  const user = serverState.users.find(u=>u.id === userId);
   if (user) {
     Object.assign(user, req.body);
     res.json(user);

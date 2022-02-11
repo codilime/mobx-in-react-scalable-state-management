@@ -1,7 +1,7 @@
-import { ApolloServer } from 'apollo-server';
-import { fileLoader, mergeTypes } from 'merge-graphql-schemas';
-import { resolve } from 'path';
-import { serverState } from './server-state.mjs';
+import { ApolloServer } from "apollo-server";
+import { fileLoader, mergeTypes } from "merge-graphql-schemas";
+import { resolve } from "path";
+import { serverState } from "./server-state.mjs";
 
 const typeDefs = mergeTypes(fileLoader(resolve('./backend/schema')));
 

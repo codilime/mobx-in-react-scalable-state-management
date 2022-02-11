@@ -1,3 +1,4 @@
+
 export const serverState = {
   users: [
     { id: '1', firstName: 'John', lastName: 'Doe', email: 'john.doe@foo.local' },
@@ -18,6 +19,6 @@ export const serverState = {
   ],
 
   nextUserId() {
-    return `${Math.max(...this.users.map((u) => parseInt(u.id))) + 1}`;
-  },
-};
+    return `${Math.max(...this.users.map(u => parseInt(u.id))) + 1}`;
+  }
+}
