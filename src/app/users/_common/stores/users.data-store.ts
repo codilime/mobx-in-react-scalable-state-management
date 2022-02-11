@@ -6,6 +6,7 @@ import {
   GetUsersResponseJTO,
   PostUserRequestJTO,
 } from '@/app/users/_common/remote-api/jto/users.jto';
+import { User } from '@/generated/graphql';
 
 export class UsersDataStore {
   private usersHttpService = inject(this, UsersHttpService);
