@@ -15,9 +15,11 @@ export const UserDetails = provider(
     const store = useInstance(UserDetailsViewStore);
     const modalStore = useInstance(UserModalViewStore);
 
+    const editUser = () => modalStore.open(store.userId);
+
     return (
       <PageLayout title={`User details: ` + store.userId}>
-        <Button onClick={() => modalStore.open(store.userId)} variant="contained">
+        <Button onClick={editUser} variant="contained">
           Edit
         </Button>
         <Link to={toUsersPath({ path: UsersPath.DETAILS, params: { id: '2' } })}>Go to user with ID 2</Link>
