@@ -10,7 +10,7 @@ export class UserDetailsViewStore {
     makeAutoObservable(this, undefined, { autoBind: true });
     this.autorunDisposer = autorun(() => {
       // eslint-disable-next-line no-console
-      console.log(`Query graphql for details of ${this.userId}...`);
+      console.log(`Query for details of ${this.userId}...`);
     });
   }
 
