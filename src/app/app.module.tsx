@@ -8,8 +8,8 @@ import { AppToast } from '@/app/_components/app-toast/app-toast';
 import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 import { FullPageFallbackProgress } from '@/app/_common/components/full-page-fallback-progress/full-page-fallback-progress';
 
-const DashboardModule = lazy(() => import('./dashboard/dashboard-module'));
-const UsersModule = lazy(() => import('./users/users-module'));
+const DashboardModule = lazy(() => import('./dashboard/dashboard.module'));
+const UsersModule = lazy(() => import('./users/users.module'));
 
 export const AppModule = provider(
   ThemeDataStore,

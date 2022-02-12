@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import { AppModule } from '@/app/app-module';
+import { AppModule } from '@/app/app.module';
 
 ReactDOM.render(<AppModule />, document.getElementById('root'));
 
