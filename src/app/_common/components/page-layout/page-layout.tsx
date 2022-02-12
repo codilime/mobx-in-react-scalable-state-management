@@ -31,7 +31,10 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
     const store = useInstance(PageLayoutViewStore);
     const navigate = useNavigate();
 
-    const goToDashboard = useCallback(() => navigate(RootPaths.DASHBOARD), [navigate]);
+    const goToDashboard = useCallback(
+      () => navigate(RootPaths.DASHBOARD),
+      [navigate],
+    );
     const goToUsers = useCallback(() => navigate(RootPaths.USERS), [navigate]);
 
     return (
@@ -52,15 +55,31 @@ export const PageLayout: React.FC<PageLayoutProps> = provider(
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 {title}
               </Typography>
-              <IconButton sx={{ ml: 1 }} onClick={store.toggleTheme} color="inherit">
-                {store.theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={store.toggleTheme}
+                color="inherit"
+              >
+                {store.theme === 'dark' ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
               </IconButton>
             </Toolbar>
           </AppBar>
           {children}
         </Box>
-        <Drawer anchor="left" open={store.drawerOpened} onClose={store.closeDrawer}>
-          <Box sx={{ width: 250 }} role="presentation" onClick={store.closeDrawer}>
+        <Drawer
+          anchor="left"
+          open={store.drawerOpened}
+          onClose={store.closeDrawer}
+        >
+          <Box
+            sx={{ width: 250 }}
+            role="presentation"
+            onClick={store.closeDrawer}
+          >
             <List>
               <ListItem button key="Dashboard" onClick={goToDashboard}>
                 <ListItemIcon>

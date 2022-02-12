@@ -8,7 +8,11 @@ export const AppToast = observer(() => {
 
   return (
     <Snackbar open={store.opened} autoHideDuration={6000} onClose={store.close}>
-      <Alert onClose={store.close} severity={store.severity} sx={{ width: '100%' }}>
+      <Alert
+        onClose={store.close}
+        severity={store.severity}
+        sx={{ width: '100%' }}
+      >
         {store.message}
       </Alert>
     </Snackbar>

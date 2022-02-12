@@ -11,7 +11,11 @@ export const GetAllUsers = gql`
   }
 `;
 export const CreateUser = gql`
-  mutation CreateUser($firstName: String!, $lastName: String!, $email: String!) {
+  mutation CreateUser(
+    $firstName: String!
+    $lastName: String!
+    $email: String!
+  ) {
     createUser(firstName: $firstName, lastName: $lastName, email: $email) {
       id
       firstName

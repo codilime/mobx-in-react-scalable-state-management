@@ -5,7 +5,9 @@ export class HttpClientService {
   private axiosInstance = axios.create({ baseURL: '/api' });
 
   async get<RES, REQ = unknown>(path: string, request?: REQ): Promise<RES> {
-    return this.axiosInstance.get(path, { params: request }).then((r) => r.data);
+    return this.axiosInstance
+      .get(path, { params: request })
+      .then((r) => r.data);
   }
 
   async post<RES, REQ = unknown>(path: string, request: REQ): Promise<RES> {

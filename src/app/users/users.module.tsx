@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { UsersList } from '@/app/users/users-list/users-list';
 import { Route, Routes } from 'react-router-dom';
-import { UserDetailsLocationStore, UsersPath } from './_common/navigation/users.paths';
+import { UserDetailsLocationStore } from './_common/navigation/users.paths';
 import { UserDetails } from '@/app/users/user-details/user-details';
 import { withLocationStoreProviderHOC } from '@/app/_common/components/location-store-provider/location-store-provider';
 import { provider } from 'react-ioc';
@@ -15,7 +15,10 @@ import { UserModalViewStore } from '@/app/users/_components/user-modal/user-moda
 // AppModule.register(UsersDataStore);
 
 // Convenient way to provide MobX *LocationStore with useSyncLocationStore() for component which depends on *LocationStore
-const UserDetailsWithLocation = withLocationStoreProviderHOC(UserDetailsLocationStore, UserDetails);
+const UserDetailsWithLocation = withLocationStoreProviderHOC(
+  UserDetailsLocationStore,
+  UserDetails,
+);
 
 const UsersModule = provider(
   UserModalViewStore,
@@ -25,8 +28,8 @@ const UsersModule = provider(
     return (
       <>
         <Routes>
-          <Route path={UsersPath.MAIN} element={<UsersList />} />
-          <Route path={UsersPath.DETAILS} element={<UserDetailsWithLocation />} />
+          <Route path="/" element={<UsersList />} />
+          <Route path="/:id" element={<UserDetailsWithLocation />} />
         </Routes>
 
         <UserModal />

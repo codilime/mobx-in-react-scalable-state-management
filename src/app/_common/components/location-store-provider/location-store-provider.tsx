@@ -2,7 +2,10 @@ import React from 'react';
 import { provider, useInstance } from 'react-ioc';
 import { observer } from 'mobx-react-lite';
 import { InjectionToken } from '@/app/_common/ioc/injection-token';
-import { LocationStore, useSyncLocationStore } from '@/app/_common/stores/location.store';
+import {
+  LocationStore,
+  useSyncLocationStore,
+} from '@/app/_common/stores/location.store';
 
 export function withLocationStoreProviderHOC(
   locationStoreToken: InjectionToken<LocationStore>,
