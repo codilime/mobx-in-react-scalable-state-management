@@ -8,17 +8,14 @@ import { withLocationStoreProviderHOC } from '@/app/_common/components/location-
 import { provider } from 'react-ioc';
 import { UserModal } from '@/app/users/_components/user-modal/user-modal';
 import { UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
+import { AppModule } from '@/app/app.module';
 
-// If we want this store to survive even when we leave `/users` path and come back - then we should register it in AppModule
-// AppModule.register(UsersDataStore);
+AppModule.register(UsersDataStore);
 
 // Convenient way to provide MobX *LocationStore with useSyncLocationStore() for component which depends on *LocationStore
 const UserDetailsWithLocation = withLocationStoreProviderHOC(UserDetailsLocationStore, UserDetails);
 
-const UsersModule = provider(
-  UsersDataStore,
-  UserModalViewStore,
-)(
+const UsersModule = provider(UserModalViewStore)(
   observer(() => {
     return (
       <>

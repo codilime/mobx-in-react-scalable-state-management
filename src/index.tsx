@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import { AppModule } from '@/app/app-module';
+import { BrowserModule } from '@/browser.module';
 
-ReactDOM.render(<AppModule />, document.getElementById('root'));
+ReactDOM.render(<BrowserModule />, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
