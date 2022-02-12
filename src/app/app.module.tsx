@@ -13,7 +13,8 @@ export const AppModule = provider(
   UsersHttpService,
   UsersDataStore,
 )(
-  // When we want to register services from descendant modules in AppModule - it must be a class (react-ioc limitation)
+  // When we want to register services from descendant modules in AppModule,
+  // then it must be a class (react-ioc limitation)
   class AppModuleComponent extends React.Component {
     render() {
       return (
