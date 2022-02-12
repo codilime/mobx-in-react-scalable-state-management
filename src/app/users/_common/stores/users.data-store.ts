@@ -89,6 +89,7 @@ export class UsersDataStore {
         this.state.loading = false;
       });
     }
+    return false;
   }
 }
 
