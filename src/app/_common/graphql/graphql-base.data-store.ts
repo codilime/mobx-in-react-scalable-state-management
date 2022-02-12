@@ -3,7 +3,12 @@ import remotedev from 'mobx-remotedev';
 import { inject } from 'react-ioc';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
 import { action, computed, makeObservable, observable } from 'mobx';
-import { ApolloCurrentResult, MutationOptions, ObservableQuery, WatchQueryOptions } from 'apollo-client';
+import {
+  ApolloCurrentResult,
+  MutationOptions,
+  ObservableQuery,
+  WatchQueryOptions,
+} from 'apollo-client';
 
 export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
   private readonly client!: GraphqlClient;
@@ -65,7 +70,9 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
     const currentResult = observable(this.queryWatcher.currentResult());
     this.result.loading = currentResult.loading;
     this.result.error = currentResult.error;
-    this.result.data = isEmpty(currentResult.data) ? undefined : (currentResult.data as QUERY_RESULT);
+    this.result.data = isEmpty(currentResult.data)
+      ? undefined
+      : (currentResult.data as QUERY_RESULT);
 
     // Do not show subscription in Redux DevTools
     Object.defineProperty(this, 'subscription', {

@@ -27,7 +27,9 @@ export class LocationStore<PROPS extends LocationProps = AnyObject> {
   }
 
   get search(): PROPS['search'] {
-    return qs.parse(this.state.search || '', { ignoreQueryPrefix: true }) as PROPS['search'];
+    return qs.parse(this.state.search || '', {
+      ignoreQueryPrefix: true,
+    }) as PROPS['search'];
   }
 
   get hash(): PROPS['hash'] {

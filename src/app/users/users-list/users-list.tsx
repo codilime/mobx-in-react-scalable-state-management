@@ -4,8 +4,14 @@ import { Link } from 'react-router-dom';
 import { provider, useInstance } from 'react-ioc';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { PageLayout } from '@/app/_common/components/page-layout/page-layout';
-import { UserRow, UsersListViewStore } from '@/app/users/users-list/users-list.view-store';
-import { toUsersPath, UsersPath } from '@/app/users/_common/navigation/users.paths';
+import {
+  UserRow,
+  UsersListViewStore,
+} from '@/app/users/users-list/users-list.view-store';
+import {
+  toUsersPath,
+  UsersPath,
+} from '@/app/users/_common/navigation/users.paths';
 import { UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
 import { Box, Button } from '@material-ui/core';
 
@@ -29,7 +35,11 @@ export const UsersList = provider(
           <Button variant="contained" onClick={addNewUser}>
             Add new user
           </Button>
-          <Button variant="contained" onClick={store.delete} disabled={store.selectionModel.length === 0}>
+          <Button
+            variant="contained"
+            onClick={store.delete}
+            disabled={store.selectionModel.length === 0}
+          >
             Delete
           </Button>
           <Button variant="contained" onClick={refresh}>
@@ -67,7 +77,14 @@ const columns: GridColDef[] = [
     headerName: 'Email',
     width: 200,
     renderCell: ({ row, value }) => (
-      <Link to={toUsersPath({ path: UsersPath.DETAILS, params: { id: (row as UserRow).id } })}>{value}</Link>
+      <Link
+        to={toUsersPath({
+          path: UsersPath.DETAILS,
+          params: { id: (row as UserRow).id },
+        })}
+      >
+        {value}
+      </Link>
     ),
   },
 ];

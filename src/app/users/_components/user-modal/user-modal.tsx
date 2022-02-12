@@ -4,8 +4,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
 import { Dialog } from '@mui/material';
 import TextField from '@material-ui/core/TextField';
-import { UserFormData, UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
-import { Button, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import {
+  UserFormData,
+  UserModalViewStore,
+} from '@/app/users/_components/user-modal/user-modal.view-store';
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 
 export const UserModal = observer(() => {
   const store = useInstance(UserModalViewStore);
@@ -19,7 +27,9 @@ export const UserModal = observer(() => {
 const UserForm = observer(() => {
   const store = useInstance(UserModalViewStore);
 
-  const { control, handleSubmit, reset } = useForm<UserFormData>({ defaultValues: store.defaultValues });
+  const { control, handleSubmit, reset } = useForm<UserFormData>({
+    defaultValues: store.defaultValues,
+  });
 
   const onSubmit = useCallback(
     async (data) => {
@@ -28,11 +38,19 @@ const UserForm = observer(() => {
     [store],
   );
 
-  const title = store.mode === 'create' ? 'Add new user' : 'Edit ' + store.user?.email;
+  const title =
+    store.mode === 'create' ? 'Add new user' : 'Edit ' + store.user?.email;
   return (
     <>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent style={{ gap: 20, display: 'flex', flexDirection: 'column', width: 500 }}>
+      <DialogContent
+        style={{
+          gap: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          width: 500,
+        }}
+      >
         <Controller
           control={control}
           name={'firstName'}

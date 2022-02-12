@@ -9,7 +9,9 @@ export function createInjectionToken<T>(tokenName: string): Class<T> {
     throw new Error('Please provide token name for easier debug.');
   }
   if (ALL_TOKENS[tokenName]) {
-    throw new Error(`Token with name ${tokenName} has been already created. Please use unique names.`);
+    throw new Error(
+      `Token with name ${tokenName} has been already created. Please use unique names.`,
+    );
   }
   ALL_TOKENS[tokenName] = true;
   // @ts-ignore

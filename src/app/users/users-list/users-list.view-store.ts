@@ -38,13 +38,18 @@ export class UsersListViewStore {
     if (success) {
       this.appToastViewStore.open('User has been created', 'success');
     } else {
-      this.appToastViewStore.open('User creation failed. Please try again.', 'error');
+      this.appToastViewStore.open(
+        'User creation failed. Please try again.',
+        'error',
+      );
     }
     return success;
   }
 
   async delete() {
-    const success = await this.usersDataStore.delete({ ids: this.selectionModel.map((id) => id.toString()) });
+    const success = await this.usersDataStore.delete({
+      ids: this.selectionModel.map((id) => id.toString()),
+    });
     if (success) {
       this.appToastViewStore.open('Users have been deleted', 'success');
     } else {
