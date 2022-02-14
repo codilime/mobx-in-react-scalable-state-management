@@ -7,12 +7,15 @@ import { withLocationStoreProviderHOC } from '@/app/_common/components/location-
 import { provider } from 'react-ioc';
 import { UserModal } from '@/app/users/_components/user-modal/user-modal';
 import { UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
+import { AppModule } from '@/app/app.module';
+import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
+import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
 
 // We use AppModule.register(...) here to use tree shaking (code splitting)
 // for any src/app/users/**.* files
 
-// AppModule.register(UsersHttpService);
-// AppModule.register(UsersDataStore);
+AppModule.register(UsersHttpService);
+AppModule.register(UsersDataStore);
 
 // Convenient way to provide MobX *LocationStore with useSyncLocationStore() for component which depends on *LocationStore
 const UserDetailsWithLocation = withLocationStoreProviderHOC(
