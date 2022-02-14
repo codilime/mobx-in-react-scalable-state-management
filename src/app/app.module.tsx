@@ -7,20 +7,15 @@ import { FullPageFallbackProgress } from '@/app/_common/components/full-page-fal
 const DashboardModule = lazy(() => import('./dashboard/dashboard.module'));
 const UsersModule = lazy(() => import('./users/users.module'));
 
-export const AppModule = provider()(
-  // When we want to register services from descendant modules in AppModule - it must be a class (react-ioc limitation)
-  class AppModuleComponent extends React.Component {
-    render() {
-      return (
-        <Router>
-          <Suspense fallback={<FullPageFallbackProgress />}>
-            <Routes>
-              <Route path={moduleRootPath(RootPaths.USERS)} element={<UsersModule />} />
-              <Route path={moduleRootPath(RootPaths.DASHBOARD)} element={<DashboardModule />} />
-            </Routes>
-          </Suspense>
-        </Router>
-      );
-    }
-  },
-);
+export const AppModule = provider()(() => {
+  return (
+    <Router>
+      <Suspense fallback={<FullPageFallbackProgress />}>
+        <Routes>
+          <Route path={moduleRootPath(RootPaths.USERS)} element={<UsersModule />} />
+          <Route path={moduleRootPath(RootPaths.DASHBOARD)} element={<DashboardModule />} />
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+});
