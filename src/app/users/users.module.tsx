@@ -1,7 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import { UsersList } from '@/app/users/users-list/users-list';
 import { Route, Routes } from 'react-router-dom';
-import { UserDetailsLocationStore } from './_common/navigation/users.paths';
+import {
+  UserDetailsLocationStore,
+  UsersPath,
+} from './_common/navigation/users.paths';
 import { UserDetails } from '@/app/users/user-details/user-details';
 import { withLocationStoreProviderHOC } from '@/app/_common/components/location-store-provider/location-store-provider';
 import { provider } from 'react-ioc';
@@ -31,8 +34,11 @@ const UsersModule = provider(
     return (
       <>
         <Routes>
-          <Route path="/" element={<UsersList />} />
-          <Route path="/:id" element={<UserDetailsWithLocation />} />
+          <Route path={UsersPath.MAIN} element={<UsersList />} />
+          <Route
+            path={UsersPath.DETAILS}
+            element={<UserDetailsWithLocation />}
+          />
         </Routes>
 
         <UserModal />
