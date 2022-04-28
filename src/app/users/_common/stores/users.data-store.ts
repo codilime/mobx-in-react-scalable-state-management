@@ -79,7 +79,9 @@ export class UsersDataStore {
     try {
       const response = await this.usersHttpService.putUser(user);
       runInAction(() => {
-        this.state.data.push(response);
+        this.state.data = this.state.data.map((existingUser) =>
+          existingUser.id === user.id ? response : existingUser,
+        );
         this.state.error = undefined;
         this.state.loading = false;
       });

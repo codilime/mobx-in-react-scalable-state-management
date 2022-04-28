@@ -1,12 +1,22 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Dialog } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { ModalState } from '@/app/_common/stores/modal.state';
 
-export const Modal: FC<{ state: ModalState<unknown> }> = observer(
-  ({ state, children }) => {
+interface ModalProps {
+  state: ModalState<unknown>;
+  onClose?: () => void;
+}
+
+export const Modal: FC<ModalProps> = observer(
+  ({ state, onClose, children }) => {
+    const handleOnClose = useCallback(() => {
+      state.close();
+      onClose?.();
+    }, [onClose, state]);
+
     return (
-      <Dialog open={state.opened} onClose={state.close}>
+      <Dialog open={state.opened} onClose={handleOnClose}>
         {children}
       </Dialog>
     );

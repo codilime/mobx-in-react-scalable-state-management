@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useInstance } from 'react-ioc';
 import { Controller, useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
@@ -16,26 +16,26 @@ import {
 } from '@material-ui/core';
 
 export const UserFormModal = observer(() => {
-  const { modalState } = useInstance(UserFormModalViewStore);
-  return <Modal state={modalState}>{modalState.opened && <UserForm />}</Modal>;
-});
-
-const UserForm = observer(() => {
   const store = useInstance(UserFormModalViewStore);
+  const { modalState, defaultValues } = store;
 
   const { control, handleSubmit, reset } = useForm<UserFormData>({
-    defaultValues: store.defaultValues,
+    defaultValues,
   });
 
-  const onSubmit = useCallback(
-    async (data) => {
-      await store.submit(data);
-    },
-    [store],
+  // reset react-hook-form when defaultValues are changing
+  // https://jasonwatmore.com/post/2021/09/23/react-hook-form-reset-form-with-default-values-and-clear-errors
+  useEffect(() => reset(defaultValues), [reset, defaultValues]);
+
+  const onReset = useCallback(() => reset(), [reset]);
+
+  const onSubmit = useMemo(
+    () => handleSubmit(store.submit),
+    [handleSubmit, store],
   );
 
   return (
-    <>
+    <Modal state={modalState} onClose={onReset}>
       <DialogTitle>{store.title}</DialogTitle>
       <DialogContent
         style={{
@@ -99,9 +99,9 @@ const UserForm = observer(() => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => reset()}>Reset</Button>
-        <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+        <Button onClick={onReset}>Reset</Button>
+        <Button onClick={onSubmit}>Submit</Button>
       </DialogActions>
-    </>
+    </Modal>
   );
 });

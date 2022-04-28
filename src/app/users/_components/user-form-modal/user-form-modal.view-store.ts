@@ -43,15 +43,18 @@ export class UserFormModalViewStore {
   }
 
   async submit(data: UserFormData) {
-    if (this.modalState.data?.mode === 'create') {
-      const success = await this.usersDataStore.create(data);
-      success && this.modalState.close();
-    } else if (this.modalState.data?.mode === 'edit') {
-      this.usersDataStore.update({
-        id: this.modalState.data.userId,
-        ...data,
-      });
+    let success = false;
+    switch (this.modalState.data?.mode) {
+      case 'create':
+        success = await this.usersDataStore.create(data);
+        break;
+      case 'edit':
+        success = await this.usersDataStore.update({
+          id: this.modalState.data.userId,
+          ...data,
+        });
     }
+    success && this.modalState.close();
   }
 }
 

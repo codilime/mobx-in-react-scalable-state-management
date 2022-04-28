@@ -17,7 +17,7 @@ app.post('/api/users', (req, res) => {
   res.json(newUser);
 });
 
-app.put('/api/users/{id}', (req, res) => {
+app.put('/api/users/:id', (req, res) => {
   const userId = req.params.id;
   const user = serverState.users.find(u=>u.id === userId);
   if (user) {
