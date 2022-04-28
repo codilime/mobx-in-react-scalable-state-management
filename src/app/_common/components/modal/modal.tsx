@@ -1,7 +1,7 @@
 import { FC, useCallback } from 'react';
 import { Dialog } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { ModalState } from '@/app/_common/stores/modal.state';
+import { ModalState } from '@/app/_common/components/modal/modal.state';
 
 interface ModalProps {
   state: ModalState<unknown>;

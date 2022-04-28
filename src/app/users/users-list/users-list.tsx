@@ -13,7 +13,9 @@ import {
   UsersPath,
 } from '@/app/users/_common/navigation/users.paths';
 import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
-import { Box, Button } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import { DeleteItemsModal } from '@/app/_common/components/delete-items-modal/delete-items-modal';
 
 export const UsersList = provider(
   UsersListViewStore,
@@ -31,13 +33,13 @@ export const UsersList = provider(
 
     return (
       <PageLayout title="Users">
-        <Box sx={{ display: 'flex', padding: 10 }} style={{ gap: 20 }}>
+        <Box sx={{ display: 'flex', padding: 1 }} style={{ gap: 20 }}>
           <Button variant="contained" onClick={addNewUser}>
             Add new user
           </Button>
           <Button
             variant="contained"
-            onClick={store.delete}
+            onClick={store.openDeleteItemsModal}
             disabled={store.selectionModel.length === 0}
           >
             Delete
@@ -55,6 +57,11 @@ export const UsersList = provider(
           columns={columns}
           disableSelectionOnClick
           autoHeight
+        />
+        <DeleteItemsModal
+          state={store.deleteItemsModal}
+          onAccept={store.delete}
+          pending={store.loading}
         />
       </PageLayout>
     );

@@ -8,7 +8,7 @@ import {
 import { provider, useInstance } from 'react-ioc';
 import { UserDetailsViewStore } from '@/app/users/user-details/user-details.view-store';
 import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
-import { Button } from '@material-ui/core';
+import Button from '@mui/material/Button';
 import { useCallback } from 'react';
 
 export const UserDetails = provider(

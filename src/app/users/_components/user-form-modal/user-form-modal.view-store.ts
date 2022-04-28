@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import { User } from '@/generated/graphql';
 import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
 import { omit } from 'lodash';
-import { ModalState } from '@/app/_common/stores/modal.state';
+import { ModalState } from '@/app/_common/components/modal/modal.state';
 
 export class UserFormModalViewStore {
   private usersDataStore = inject(this, UsersDataStore);

@@ -2,18 +2,16 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useInstance } from 'react-ioc';
 import { Controller, useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import { Modal } from '@/app/_common/components/modal/modal';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 import {
   UserFormData,
   UserFormModalViewStore,
 } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core';
 
 export const UserFormModal = observer(() => {
   const store = useInstance(UserFormModalViewStore);
