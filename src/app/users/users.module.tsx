@@ -8,8 +8,8 @@ import {
 import { UserDetails } from '@/app/users/user-details/user-details';
 import { withLocationStoreProviderHOC } from '@/app/_common/components/location-store-provider/location-store-provider';
 import { provider } from 'react-ioc';
-import { UserModal } from '@/app/users/_components/user-modal/user-modal';
-import { UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
+import { UserFormModal } from '@/app/users/_components/user-form-modal/user-form-modal';
+import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
 import { AppModule } from '@/app/app.module';
 import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
 import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
@@ -27,7 +27,7 @@ const UserDetailsWithLocation = withLocationStoreProviderHOC(
 );
 
 const UsersModule = provider(
-  UserModalViewStore,
+  UserFormModalViewStore,
   //
 )(
   observer(() => {
@@ -41,7 +41,7 @@ const UsersModule = provider(
           />
         </Routes>
 
-        <UserModal />
+        <UserFormModal />
       </>
     );
   }),

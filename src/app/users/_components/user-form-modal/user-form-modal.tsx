@@ -2,12 +2,12 @@ import { useCallback } from 'react';
 import { useInstance } from 'react-ioc';
 import { Controller, useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
-import { Dialog } from '@mui/material';
 import TextField from '@material-ui/core/TextField';
+import { Modal } from '@/app/_common/components/modal/modal';
 import {
   UserFormData,
-  UserModalViewStore,
-} from '@/app/users/_components/user-modal/user-modal.view-store';
+  UserFormModalViewStore,
+} from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
 import {
   Button,
   DialogActions,
@@ -15,17 +15,13 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
-export const UserModal = observer(() => {
-  const store = useInstance(UserModalViewStore);
-  return (
-    <Dialog open={store.opened} onClose={store.close}>
-      {store.opened && <UserForm />}
-    </Dialog>
-  );
+export const UserFormModal = observer(() => {
+  const { modalState } = useInstance(UserFormModalViewStore);
+  return <Modal state={modalState}>{modalState.opened && <UserForm />}</Modal>;
 });
 
 const UserForm = observer(() => {
-  const store = useInstance(UserModalViewStore);
+  const store = useInstance(UserFormModalViewStore);
 
   const { control, handleSubmit, reset } = useForm<UserFormData>({
     defaultValues: store.defaultValues,
@@ -38,11 +34,9 @@ const UserForm = observer(() => {
     [store],
   );
 
-  const title =
-    store.mode === 'create' ? 'Add new user' : 'Edit ' + store.user?.email;
   return (
     <>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>{store.title}</DialogTitle>
       <DialogContent
         style={{
           gap: 20,

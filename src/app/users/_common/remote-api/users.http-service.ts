@@ -4,6 +4,8 @@ import {
   GetUsersResponseJTO,
   PostUserRequestJTO,
   PostUserResponseJTO,
+  PutUserRequestJTO,
+  PutUserResponseJTO,
 } from '@/app/users/_common/remote-api/jto/users.jto';
 
 export class UsersHttpService {
@@ -15,6 +17,10 @@ export class UsersHttpService {
 
   async postUser(user: PostUserRequestJTO) {
     return this.httpClient.post<PostUserResponseJTO>('/users', user);
+  }
+
+  async putUser(user: PutUserRequestJTO) {
+    return this.httpClient.put<PutUserResponseJTO>('/users/' + user.id, user);
   }
 
   async deleteUsers({ ids }: DeleteUsersRequestJTO) {

@@ -7,8 +7,9 @@ import {
 } from '@/app/users/_common/navigation/users.paths';
 import { provider, useInstance } from 'react-ioc';
 import { UserDetailsViewStore } from '@/app/users/user-details/user-details.view-store';
-import { UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
+import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
 import { Button } from '@material-ui/core';
+import { useCallback } from 'react';
 
 export const UserDetails = provider(
   UserDetailsViewStore,
@@ -16,9 +17,12 @@ export const UserDetails = provider(
 )(
   observer(() => {
     const store = useInstance(UserDetailsViewStore);
-    const modalStore = useInstance(UserModalViewStore);
+    const { modalState } = useInstance(UserFormModalViewStore);
 
-    const editUser = () => modalStore.open(store.userId);
+    const editUser = useCallback(
+      () => modalState.open({ mode: 'edit', userId: store.userId }),
+      [modalState, store],
+    );
 
     return (
       <PageLayout title={`User details: ` + store.userId}>

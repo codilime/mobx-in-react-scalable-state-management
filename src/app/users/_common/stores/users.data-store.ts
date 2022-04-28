@@ -5,6 +5,7 @@ import {
   DeleteUsersRequestJTO,
   GetUsersResponseJTO,
   PostUserRequestJTO,
+  PutUserRequestJTO,
 } from '@/app/users/_common/remote-api/jto/users.jto';
 import { User } from '@/generated/graphql';
 
@@ -58,6 +59,25 @@ export class UsersDataStore {
     this.state.loading = true;
     try {
       const response = await this.usersHttpService.postUser(user);
+      runInAction(() => {
+        this.state.data.push(response);
+        this.state.error = undefined;
+        this.state.loading = false;
+      });
+      return true;
+    } catch (e) {
+      runInAction(() => {
+        this.state.error = 'Connection error';
+        this.state.loading = false;
+      });
+    }
+    return false;
+  }
+
+  async update(user: PutUserRequestJTO) {
+    this.state.loading = true;
+    try {
+      const response = await this.usersHttpService.putUser(user);
       runInAction(() => {
         this.state.data.push(response);
         this.state.error = undefined;

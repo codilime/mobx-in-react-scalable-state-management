@@ -12,7 +12,7 @@ import {
   toUsersPath,
   UsersPath,
 } from '@/app/users/_common/navigation/users.paths';
-import { UserModalViewStore } from '@/app/users/_components/user-modal/user-modal.view-store';
+import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
 import { Box, Button } from '@material-ui/core';
 
 export const UsersList = provider(
@@ -21,11 +21,11 @@ export const UsersList = provider(
 )(
   observer(() => {
     const store = useInstance(UsersListViewStore);
-    const userModalViewStore = useInstance(UserModalViewStore);
+    const { modalState } = useInstance(UserFormModalViewStore);
 
     const addNewUser = useCallback(async () => {
-      userModalViewStore.open();
-    }, [userModalViewStore]);
+      modalState.open({ mode: 'create' });
+    }, [modalState]);
 
     const refresh = useCallback(() => store.refresh(), [store]);
 

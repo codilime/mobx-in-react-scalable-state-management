@@ -14,6 +14,10 @@ export class HttpClientService {
     return this.axiosInstance.post(path, request).then((r) => r.data);
   }
 
+  async put<RES, REQ = unknown>(path: string, request: REQ): Promise<RES> {
+    return this.axiosInstance.put(path, request).then((r) => r.data);
+  }
+
   async delete<RES = unknown>(path: string): Promise<RES> {
     return this.axiosInstance.delete(path).then((r) => r.data);
   }
