@@ -1,5 +1,7 @@
 import { inject } from 'react-ioc';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { User } from '@/generated/graphql';
+import { AsyncState } from '@/app/_common/stores/async.state';
 import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
 import {
   DeleteUsersRequestJTO,
@@ -7,14 +9,16 @@ import {
   PostUserRequestJTO,
   PutUserRequestJTO,
 } from '@/app/users/_common/remote-api/jto/users.jto';
-import { User } from '@/generated/graphql';
 
 export class UsersDataStore {
   private usersHttpService = inject(this, UsersHttpService);
 
   private state: State = {
-    data: [] as GetUsersResponseJTO,
-    loading: false,
+    data: [],
+    asyncRead: new AsyncState(),
+    asyncCreate: new AsyncState(),
+    asyncUpdate: new AsyncState(),
+    asyncDelete: new AsyncState(),
   };
 
   constructor() {
@@ -26,12 +30,20 @@ export class UsersDataStore {
     return this.state.data;
   }
 
-  get loading() {
-    return this.state.loading;
+  get asyncRead() {
+    return this.state.asyncRead;
   }
 
-  get error() {
-    return this.state.error;
+  get asyncCreate() {
+    return this.state.asyncCreate;
+  }
+
+  get asyncUpdate() {
+    return this.state.asyncUpdate;
+  }
+
+  get asyncDelete() {
+    return this.state.asyncDelete;
   }
 
   findUserById(userId: User['id']) {
@@ -39,86 +51,81 @@ export class UsersDataStore {
   }
 
   async read() {
-    this.state.loading = true;
+    const asyncState = this.state.asyncRead;
+    asyncState.invoke();
     try {
       const response = await this.usersHttpService.getUsers();
       runInAction(() => {
         this.state.data = response;
-        this.state.error = undefined;
-        this.state.loading = false;
+        asyncState.resolve();
       });
     } catch (e) {
       runInAction(() => {
-        this.state.error = 'Connection error';
-        this.state.loading = false;
+        asyncState.reject(e);
       });
     }
   }
 
   async create(user: PostUserRequestJTO) {
-    this.state.loading = true;
+    const asyncState = this.state.asyncCreate;
+    asyncState.invoke();
     try {
       const response = await this.usersHttpService.postUser(user);
       runInAction(() => {
         this.state.data.push(response);
-        this.state.error = undefined;
-        this.state.loading = false;
+        asyncState.resolve();
       });
-      return true;
     } catch (e) {
       runInAction(() => {
-        this.state.error = 'Connection error';
-        this.state.loading = false;
+        asyncState.reject(e);
       });
     }
-    return false;
+    return asyncState;
   }
 
   async update(user: PutUserRequestJTO) {
-    this.state.loading = true;
+    const asyncState = this.state.asyncUpdate;
+    asyncState.invoke();
     try {
       const response = await this.usersHttpService.putUser(user);
       runInAction(() => {
         this.state.data = this.state.data.map((existingUser) =>
           existingUser.id === user.id ? response : existingUser,
         );
-        this.state.error = undefined;
-        this.state.loading = false;
+        asyncState.resolve();
       });
-      return true;
     } catch (e) {
       runInAction(() => {
-        this.state.error = 'Connection error';
-        this.state.loading = false;
+        asyncState.reject(e);
       });
     }
-    return false;
+    return asyncState;
   }
 
   async delete(request: DeleteUsersRequestJTO) {
-    this.state.loading = true;
+    const asyncState = this.state.asyncDelete;
+    asyncState.invoke();
     try {
       await this.usersHttpService.deleteUsers(request);
       runInAction(() => {
         this.state.data = this.state.data.filter(
           (u) => !request.ids.includes(u.id),
         );
-        this.state.error = undefined;
-        this.state.loading = false;
+        asyncState.resolve();
       });
-      return true;
     } catch (e) {
       runInAction(() => {
-        this.state.error = 'Connection error';
-        this.state.loading = false;
+        asyncState.reject(e);
       });
     }
-    return false;
+    return asyncState;
   }
 }
 
 type State = {
   data: GetUsersResponseJTO;
-  loading: boolean;
-  error?: string;
+  asyncRead: AsyncState;
+  asyncCreate: AsyncState;
+  asyncUpdate: AsyncState;
+  asyncDelete: AsyncState;
 };

@@ -1,10 +1,15 @@
 import { makeAutoObservable } from 'mobx';
 
-export class ModalState<DATA> {
-  readonly state!: State<DATA>;
+const DEFAULT_STATE = {
+  opened: false,
+  data: null,
+};
 
-  constructor(state: State<DATA> = { data: null, opened: false }) {
-    this.state = state;
+export class ModalState<DATA> {
+  private readonly state!: State<DATA>;
+
+  constructor(initialState: Partial<State<DATA>> = {}) {
+    this.state = Object.assign({}, DEFAULT_STATE, initialState);
     makeAutoObservable(this, undefined, { autoBind: true });
   }
 

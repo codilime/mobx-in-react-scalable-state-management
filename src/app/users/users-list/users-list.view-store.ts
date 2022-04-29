@@ -1,7 +1,7 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import { inject } from 'react-ioc';
 import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
-import { CreateUserMutationVariables, User } from '@/generated/graphql';
+import { User } from '@/generated/graphql';
 import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 import { ModalState } from '@/app/_common/components/modal/modal.state';
 import { DeleteItemsModalData } from '@/app/_common/components/delete-items-modal/delete-items-modal';
@@ -30,11 +30,15 @@ export class UsersListViewStore {
   }
 
   get users() {
-    return [...(this.usersDataStore.users || [])];
+    return toJS(this.usersDataStore.users);
   }
 
-  get loading() {
-    return this.usersDataStore.loading;
+  get asyncRead() {
+    return this.usersDataStore.asyncRead;
+  }
+
+  get asyncDelete() {
+    return this.usersDataStore.asyncDelete;
   }
 
   setSelectionModel(
@@ -45,19 +49,6 @@ export class UsersListViewStore {
 
   refresh() {
     this.usersDataStore.read();
-  }
-
-  async create(user: CreateUserMutationVariables) {
-    const success = await this.usersDataStore.create(user);
-    if (success) {
-      this.appToastViewStore.open('User has been created', 'success');
-    } else {
-      this.appToastViewStore.open(
-        'User creation failed. Please try again.',
-        'error',
-      );
-    }
-    return success;
   }
 
   openDeleteItemsModal() {
@@ -71,15 +62,19 @@ export class UsersListViewStore {
   }
 
   async delete(ids: Array<User['id']>) {
-    const success = await this.usersDataStore.delete({ ids });
-    if (success) {
+    const { isResolved, errorMessage } = await this.usersDataStore.delete({
+      ids,
+    });
+    if (isResolved) {
       this.appToastViewStore.open('Users have been deleted', 'success');
       this.state.deleteItemsModal.close();
       this.state.selectionModel = [];
     } else {
-      this.appToastViewStore.open('Users deletion failed', 'error');
+      this.appToastViewStore.open(
+        'Users deletion failed: ' + errorMessage,
+        'error',
+      );
     }
-    return success;
   }
 }
 

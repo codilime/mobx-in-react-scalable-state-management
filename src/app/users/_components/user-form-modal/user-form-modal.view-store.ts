@@ -4,9 +4,12 @@ import { User } from '@/generated/graphql';
 import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
 import { omit } from 'lodash';
 import { ModalState } from '@/app/_common/components/modal/modal.state';
+import { AsyncState } from '@/app/_common/stores/async.state';
+import { AppToastViewStore } from '@/app/_common/stores/app-toast.view-store';
 
 export class UserFormModalViewStore {
   private usersDataStore = inject(this, UsersDataStore);
+  private appToastViewStore = inject(this, AppToastViewStore);
 
   private state = {
     modal: new ModalState<ModalData>(),
@@ -34,6 +37,12 @@ export class UserFormModalViewStore {
     }
   }
 
+  get asyncState() {
+    return this.modalState.data?.mode === 'create'
+      ? this.usersDataStore.asyncCreate
+      : this.usersDataStore.asyncUpdate;
+  }
+
   private get user() {
     if (this.modalState.data?.mode === 'edit') {
       return this.usersDataStore.findUserById(this.modalState.data.userId);
@@ -43,18 +52,28 @@ export class UserFormModalViewStore {
   }
 
   async submit(data: UserFormData) {
-    let success = false;
+    let asyncState: AsyncState | null = null;
     switch (this.modalState.data?.mode) {
       case 'create':
-        success = await this.usersDataStore.create(data);
+        asyncState = await this.usersDataStore.create(data);
         break;
       case 'edit':
-        success = await this.usersDataStore.update({
+        asyncState = await this.usersDataStore.update({
           id: this.modalState.data.userId,
           ...data,
         });
     }
-    success && this.modalState.close();
+    if (asyncState?.isResolved) {
+      const message =
+        this.modalState.data?.mode === 'create' ? 'added' : 'updated';
+      this.appToastViewStore.open(`User has been successfully ${message}`);
+      this.modalState.close();
+    } else {
+      this.appToastViewStore.open(
+        'User operation failed: ' + asyncState?.errorMessage,
+        'error',
+      );
+    }
   }
 }
 

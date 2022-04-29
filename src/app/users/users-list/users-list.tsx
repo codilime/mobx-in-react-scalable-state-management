@@ -57,11 +57,12 @@ export const UsersList = provider(
           columns={columns}
           disableSelectionOnClick
           autoHeight
+          loading={store.asyncRead.isLoading}
         />
         <DeleteItemsModal
           state={store.deleteItemsModal}
           onAccept={store.delete}
-          pending={store.loading}
+          pending={store.asyncDelete.isPending}
         />
       </PageLayout>
     );

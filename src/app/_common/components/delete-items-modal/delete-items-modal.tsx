@@ -88,7 +88,7 @@ export const DeleteItemsModal: FC<DeleteItemsModalProps> = observer(
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
           {pending ? (
-            <CircularProgress size={24} />
+            <CircularProgress />
           ) : (
             <Button onClick={handleAccept} disabled={areAllUnchecked}>
               OK

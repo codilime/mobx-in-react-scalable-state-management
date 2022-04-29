@@ -12,6 +12,7 @@ import {
   UserFormData,
   UserFormModalViewStore,
 } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const UserFormModal = observer(() => {
   const store = useInstance(UserFormModalViewStore);
@@ -98,7 +99,11 @@ export const UserFormModal = observer(() => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onReset}>Reset</Button>
-        <Button onClick={onSubmit}>Submit</Button>
+        {store.asyncState.isPending ? (
+          <CircularProgress />
+        ) : (
+          <Button onClick={onSubmit}>Submit</Button>
+        )}
       </DialogActions>
     </Modal>
   );
