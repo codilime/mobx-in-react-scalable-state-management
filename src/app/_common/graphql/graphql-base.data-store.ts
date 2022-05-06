@@ -1,5 +1,4 @@
 import { isEmpty, isNil } from 'lodash';
-import remotedev from 'mobx-remotedev';
 import { inject } from 'react-ioc';
 import { GraphqlClient } from '@/app/_common/graphql/graphql-client';
 import { action, computed, makeObservable, observable } from 'mobx';
@@ -42,7 +41,6 @@ export class GraphqlBaseDataStore<QUERY_RESULT, QUERY_VARIABLES> {
       },
       { autoBind: true },
     );
-    remotedev(this, { name: this.constructor.name });
   }
 
   get loading() {

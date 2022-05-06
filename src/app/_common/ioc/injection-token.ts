@@ -6,7 +6,7 @@ export type InjectionToken<T> = Class<T>;
 
 export function createInjectionToken<T>(tokenName: string): Class<T> {
   if (!tokenName) {
-    throw new Error('Please provide token name for easier debug.');
+    throw new Error('Provide a token name to make debugging easier');
   }
   if (ALL_TOKENS[tokenName]) {
     throw new Error(
