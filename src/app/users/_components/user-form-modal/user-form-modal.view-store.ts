@@ -12,7 +12,7 @@ export class UserFormModalViewStore {
   private appToastViewStore = inject(this, AppToastViewStore);
 
   private state = {
-    modal: new ModalState<ModalData>(),
+    modal: new ModalState<UserFormModalData>(),
   };
 
   constructor() {
@@ -77,16 +77,16 @@ export class UserFormModalViewStore {
   }
 }
 
-interface ModalDataCreate {
+interface UserFormModalDataCreate {
   mode: 'create';
   userId?: undefined;
 }
 
-interface ModalDataEdit {
+interface UserFormModalDataEdit {
   mode: 'edit';
   userId: User['id'];
 }
 
-type ModalData = ModalDataCreate | ModalDataEdit;
+type UserFormModalData = UserFormModalDataCreate | UserFormModalDataEdit;
 
 export interface UserFormData extends Omit<User, 'id' | '__typename'> {}
