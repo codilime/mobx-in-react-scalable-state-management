@@ -9,9 +9,22 @@ import {
   PutUserRequestJTO,
   UserJTO,
 } from '@/app/users/_common/remote-api/jto/users.jto';
+import {
+  from,
+  Observable,
+  ObservableInput,
+  Subscription,
+  switchMap,
+  timer,
+} from 'rxjs';
+import { retry, tap } from 'rxjs/operators';
+import { toStream } from 'mobx-utils';
 
 export class UsersDataStore {
   private usersHttpService = inject(this, UsersHttpService);
+
+  private readSubscription$!: Subscription;
+  private readTrigger = 0;
 
   private state: State = {
     entities: new Map(),
@@ -23,7 +36,7 @@ export class UsersDataStore {
 
   constructor() {
     makeAutoObservable(this, undefined, { autoBind: true });
-    this.read(); // fetch data once the UsersDataStore has been created
+    this.afterCreate();
   }
 
   get asyncRead() {
@@ -50,21 +63,36 @@ export class UsersDataStore {
     return this.state.entities.get(userId);
   }
 
-  async read() {
-    const asyncState = this.state.asyncRead;
-    asyncState.invoke();
-    try {
-      const response = await this.usersHttpService.getUsers();
-      runInAction(() => {
-        this.state.entities.clear();
-        response.forEach((item) => this.state.entities.set(item.id, item));
-        asyncState.resolve();
-      });
-    } catch (e) {
-      runInAction(() => {
-        asyncState.reject(e);
-      });
-    }
+  refresh() {
+    this.readTrigger++;
+  }
+
+  private afterCreate() {
+    this.readSubscription$ = from(
+      toStream(() => this.readTrigger, true) as ObservableInput<number>,
+    )
+      .pipe(
+        tap(() => this.state.asyncRead.invoke()),
+        switchMap(() => this.usersHttpService.getUsers$()),
+        tap((response) =>
+          runInAction(() => {
+            this.state.entities.clear();
+            response.forEach((item) => this.state.entities.set(item.id, item));
+            this.state.asyncRead.resolve();
+          }),
+        ),
+        retry({
+          delay: (error, retryCount) => {
+            this.state.asyncRead.reject(error);
+            return timer(1000);
+          },
+        }),
+      )
+      .subscribe();
+  }
+
+  dispose() {
+    this.readSubscription$.unsubscribe();
   }
 
   async create(user: PostUserRequestJTO) {

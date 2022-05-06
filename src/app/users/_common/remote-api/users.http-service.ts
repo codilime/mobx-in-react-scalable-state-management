@@ -11,8 +11,8 @@ import {
 export class UsersHttpService {
   private httpClient = new HttpClientService();
 
-  async getUsers() {
-    return this.httpClient.get<GetUsersResponseJTO>('/users');
+  getUsers$() {
+    return this.httpClient.get$<GetUsersResponseJTO>('/users');
   }
 
   async postUser(user: PostUserRequestJTO) {

@@ -48,7 +48,7 @@ export class UsersListViewStore {
   }
 
   refresh() {
-    this.usersDataStore.read();
+    this.usersDataStore.refresh();
   }
 
   openDeleteItemsModal() {
