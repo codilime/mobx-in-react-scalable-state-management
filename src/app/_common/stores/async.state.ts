@@ -2,7 +2,6 @@ import { makeAutoObservable } from 'mobx';
 import { getErrorMessage } from '../utils/get-error-message';
 
 export enum AsyncStatus {
-  IDLE = 'IDLE',
   PENDING = 'PENDING',
   RESOLVED = 'RESOLVED',
   REJECTED = 'REJECTED',
@@ -10,7 +9,7 @@ export enum AsyncStatus {
 
 const DEFAULT_STATE = {
   isPristine: true,
-  status: AsyncStatus.IDLE,
+  status: AsyncStatus.RESOLVED,
   errorMessage: '',
 };
 
@@ -38,14 +37,6 @@ export class AsyncState {
     return this.status === AsyncStatus.PENDING;
   }
 
-  get isIdle() {
-    return this.status === AsyncStatus.IDLE;
-  }
-
-  get isLoading() {
-    return this.isIdle || this.isPending;
-  }
-
   get isResolved() {
     return this.status === AsyncStatus.RESOLVED;
   }
@@ -56,11 +47,6 @@ export class AsyncState {
 
   get isReloading() {
     return !this.isPristine && this.isPending;
-  }
-
-  idle() {
-    this.state.status = AsyncStatus.IDLE;
-    this.state.errorMessage = '';
   }
 
   invoke() {

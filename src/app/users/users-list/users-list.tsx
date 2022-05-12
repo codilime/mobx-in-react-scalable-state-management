@@ -57,7 +57,7 @@ export const UsersList = provider(
           columns={columns}
           disableSelectionOnClick
           autoHeight
-          loading={store.asyncRead.isLoading}
+          loading={store.asyncRead.isPending}
         />
         <DeleteItemsModal
           state={store.deleteItemsModal}
