@@ -9,22 +9,15 @@ import {
   PutUserRequestJTO,
   UserJTO,
 } from '@/app/users/_common/remote-api/jto/users.jto';
-import {
-  from,
-  Observable,
-  ObservableInput,
-  Subscription,
-  switchMap,
-  timer,
-} from 'rxjs';
-import { retry, tap } from 'rxjs/operators';
-import { toStream } from 'mobx-utils';
+import { Subscription } from 'rxjs';
+import { subscribeAsyncReader } from '@/app/_common/stores/subscribe-async-reader';
 
 export class UsersDataStore {
   private usersHttpService = inject(this, UsersHttpService);
 
   private readSubscription$!: Subscription;
-  private readTrigger = 0;
+
+  private readRequest = false;
 
   private state: State = {
     entities: new Map(),
@@ -64,31 +57,19 @@ export class UsersDataStore {
   }
 
   refresh() {
-    this.readTrigger++;
+    this.readRequest = !this.readRequest;
   }
 
   private afterCreate() {
-    this.readSubscription$ = from(
-      toStream(() => this.readTrigger, true) as ObservableInput<number>,
-    )
-      .pipe(
-        tap(() => this.state.asyncRead.invoke()),
-        switchMap(() => this.usersHttpService.getUsers$()),
-        tap((response) =>
-          runInAction(() => {
-            this.state.entities.clear();
-            response.forEach((item) => this.state.entities.set(item.id, item));
-            this.state.asyncRead.resolve();
-          }),
-        ),
-        retry({
-          delay: (error, retryCount) => {
-            this.state.asyncRead.reject(error);
-            return timer(1000);
-          },
-        }),
-      )
-      .subscribe();
+    this.readSubscription$ = subscribeAsyncReader({
+      asyncState: this.state.asyncRead,
+      request: () => this.readRequest,
+      onReadData: () => this.usersHttpService.getUsers$(),
+      onSuccess: (response) => {
+        this.state.entities.clear();
+        response.forEach((item) => this.state.entities.set(item.id, item));
+      },
+    });
   }
 
   dispose() {

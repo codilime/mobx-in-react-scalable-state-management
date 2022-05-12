@@ -80,8 +80,8 @@ export class AsyncState {
   }
 }
 
-type State = {
+interface State {
   isPristine: boolean;
   status: AsyncStatus;
   errorMessage: string;
-};
+}
