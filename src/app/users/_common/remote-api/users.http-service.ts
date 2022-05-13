@@ -1,6 +1,8 @@
 import { HttpClientService } from '@/app/_common/http/http-client.service';
 import {
   DeleteUsersRequestJTO,
+  GetUserDetailsRequestJTO,
+  GetUserDetailsResponseJTO,
   GetUsersResponseJTO,
   PostUserRequestJTO,
   PostUserResponseJTO,
@@ -10,6 +12,12 @@ import {
 
 export class UsersHttpService {
   private httpClient = new HttpClientService();
+
+  getUserDetails$(userId: GetUserDetailsRequestJTO) {
+    return this.httpClient.get$<GetUserDetailsResponseJTO>(
+      '/users/' + userId + '/details',
+    );
+  }
 
   getUsers$() {
     return this.httpClient.get$<GetUsersResponseJTO>('/users');

@@ -15,7 +15,7 @@ import { subscribeAsyncReader } from '@/app/_common/stores/subscribe-async-reade
 export class UsersDataStore {
   private usersHttpService = inject(this, UsersHttpService);
 
-  private readSubscription$!: Subscription;
+  private readSubscription$?: Subscription;
 
   private readRequest = false;
 
@@ -64,7 +64,7 @@ export class UsersDataStore {
     this.readSubscription$ = subscribeAsyncReader({
       asyncState: this.state.asyncRead,
       request: () => this.readRequest,
-      onReadData: () => this.usersHttpService.getUsers$(),
+      read: () => this.usersHttpService.getUsers$(),
       onSuccess: (response) => {
         this.state.entities.clear();
         response.forEach((item) => this.state.entities.set(item.id, item));
@@ -73,7 +73,7 @@ export class UsersDataStore {
   }
 
   dispose() {
-    this.readSubscription$.unsubscribe();
+    this.readSubscription$?.unsubscribe();
   }
 
   async create(user: PostUserRequestJTO) {

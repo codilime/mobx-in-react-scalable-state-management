@@ -1,13 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Link } from 'react-router-dom';
 import { provider, useInstance } from 'react-ioc';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { PageLayout } from '@/app/_common/components/page-layout/page-layout';
-import {
-  UserRow,
-  UsersListViewStore,
-} from '@/app/users/users-list/users-list.view-store';
+import { UsersListViewStore } from '@/app/users/users-list/users-list.view-store';
 import {
   toUsersPath,
   UsersPath,
@@ -16,6 +12,7 @@ import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { DeleteItemsModal } from '@/app/_common/components/delete-items-modal/delete-items-modal';
+import { UserJTO } from '@/app/users/_common/remote-api/jto/users.jto';
 
 export const UsersList = provider(
   UsersListViewStore,
@@ -29,11 +26,60 @@ export const UsersList = provider(
       modalState.open({ mode: 'create' });
     }, [modalState]);
 
+    const editUser = useCallback(
+      async (userId: UserJTO['id']) => {
+        modalState.open({ mode: 'edit', userId });
+      },
+      [modalState],
+    );
+
     const refresh = useCallback(() => store.refresh(), [store]);
+
+    const columns = useMemo(
+      (): GridColDef[] => [
+        {
+          field: 'firstName',
+          headerName: 'First name',
+          width: 150,
+        },
+        {
+          field: 'lastName',
+          headerName: 'Last name',
+          width: 150,
+        },
+        {
+          field: 'email',
+          headerName: 'Email',
+          flex: 1,
+        },
+        {
+          field: 'id',
+          headerName: '',
+          width: 200,
+          renderCell: ({ value }) => (
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button
+                variant="outlined"
+                href={toUsersPath({
+                  path: UsersPath.DETAILS,
+                  params: { id: value },
+                })}
+              >
+                Details
+              </Button>
+              <Button variant="outlined" onClick={() => editUser(value)}>
+                Edit
+              </Button>
+            </Box>
+          ),
+        },
+      ],
+      [editUser],
+    );
 
     return (
       <PageLayout title="Users">
-        <Box sx={{ display: 'flex', padding: 1 }} style={{ gap: 20 }}>
+        <Box sx={{ display: 'flex', padding: 1, gap: 1 }}>
           <Button variant="contained" onClick={addNewUser}>
             Add new user
           </Button>
@@ -59,6 +105,7 @@ export const UsersList = provider(
           autoHeight
           loading={store.asyncRead.isPending}
         />
+
         <DeleteItemsModal
           state={store.deleteItemsModal}
           onAccept={store.delete}
@@ -68,31 +115,3 @@ export const UsersList = provider(
     );
   }),
 );
-
-const columns: GridColDef[] = [
-  {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-  },
-  {
-    field: 'email',
-    headerName: 'Email',
-    width: 200,
-    renderCell: ({ row, value }) => (
-      <Link
-        to={toUsersPath({
-          path: UsersPath.DETAILS,
-          params: { id: (row as UserRow).id },
-        })}
-      >
-        {value}
-      </Link>
-    ),
-  },
-];

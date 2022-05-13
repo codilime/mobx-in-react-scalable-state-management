@@ -1,24 +1,24 @@
-import { AsyncState } from '@/app/_common/stores/async.state';
-import { from, Observable, ObservableInput, switchMap, timer } from 'rxjs';
+import { runInAction } from 'mobx';
 import { toStream } from 'mobx-utils';
 import { retry, tap } from 'rxjs/operators';
-import { runInAction } from 'mobx';
+import { from, Observable, ObservableInput, switchMap, timer } from 'rxjs';
+import { AsyncState } from '@/app/_common/stores/async.state';
 
 export function subscribeAsyncReader<RESPONSE, REQUEST = unknown>({
-  request,
   asyncState,
+  request,
+  read,
   onSuccess,
-  onReadData,
 }: {
-  request: () => REQUEST;
   asyncState: AsyncState;
+  request: () => REQUEST;
+  read: (request: REQUEST) => Observable<RESPONSE>;
   onSuccess: (response: RESPONSE) => void;
-  onReadData: (request: REQUEST) => Observable<RESPONSE>;
 }) {
   return from(toStream(request, true) as ObservableInput<REQUEST>)
     .pipe(
       tap(() => asyncState.invoke()),
-      switchMap(onReadData),
+      switchMap(read),
       tap((response) => {
         runInAction(() => {
           onSuccess(response);
