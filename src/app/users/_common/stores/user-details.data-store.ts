@@ -1,10 +1,7 @@
-import { makeAutoObservable, onBecomeObserved } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { inject } from 'react-ioc';
 import { UserDetailsLocationStore } from '@/app/users/_common/navigation/users.paths';
-import { AsyncState } from '@/app/_common/stores/async.state';
 import { GetUserDetailsResponseJTO } from '@/app/users/_common/remote-api/jto/users.jto';
-import { Subscription } from 'rxjs';
-import { subscribeAsyncReader } from '@/app/_common/stores/subscribe-async-reader';
 import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
 
 export class UserDetailsDataStore {
@@ -12,44 +9,56 @@ export class UserDetailsDataStore {
   private readonly usersHttpService = inject(this, UsersHttpService);
 
   private state: State = {
-    asyncRead: new AsyncState(),
+    loading: false,
+    error: '',
     response: null,
   };
 
-  private readSubscription$?: Subscription;
-
   constructor() {
     makeAutoObservable(this, undefined, { autoBind: true });
-    this.afterCreate();
+    this.read();
   }
 
-  get asyncRead() {
-    return this.state.asyncRead;
+  get loading() {
+    return this.state.loading;
+  }
+
+  get error() {
+    return this.state.error;
   }
 
   get userDetails() {
     return this.state.response;
   }
 
-  private afterCreate() {
-    const stopObserving = onBecomeObserved(this.state, 'response', () => {
-      stopObserving(); // only once
-
-      this.readSubscription$ = subscribeAsyncReader({
-        asyncState: this.state.asyncRead,
-        request: () => this.locationStore.params.id,
-        read: (userId) => this.usersHttpService.getUserDetails$(userId),
-        onSuccess: (response) => (this.state.response = response),
-      });
-    });
+  refresh() {
+    this.read();
   }
 
-  dispose() {
-    this.readSubscription$?.unsubscribe();
+  private async read() {
+    this.state.response = null;
+    this.state.loading = true;
+    this.state.error = '';
+
+    try {
+      const response = await this.usersHttpService.getUserDetails(
+        this.locationStore.params.id,
+      );
+      runInAction(() => {
+        this.state.response = response;
+        this.state.loading = false;
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.state.error = 'Connection problem...';
+        this.state.loading = false;
+      });
+    }
   }
 }
 
 interface State {
-  asyncRead: AsyncState;
+  loading: boolean;
+  error: string;
   response: GetUserDetailsResponseJTO | null;
 }

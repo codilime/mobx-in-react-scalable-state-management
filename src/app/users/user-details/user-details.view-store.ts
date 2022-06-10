@@ -10,19 +10,27 @@ export class UserDetailsViewStore {
   private readonly userDetailsDataStore = inject(this, UserDetailsDataStore);
 
   private state = {
-    auditTrailVisible: false,
+    auditTrailVisible: true,
   };
 
   constructor() {
     makeAutoObservable(this, undefined, { autoBind: true });
   }
 
-  get asyncReadDetails() {
-    return this.userDetailsDataStore.asyncRead;
+  get usersLoading() {
+    return this.usersDataStore.loading;
   }
 
-  get asyncReadUsers() {
-    return this.usersDataStore.asyncRead;
+  get detailsLoading() {
+    return this.userDetailsDataStore.loading;
+  }
+
+  get usersError() {
+    return this.usersDataStore.error;
+  }
+
+  get detailsError() {
+    return this.userDetailsDataStore.error;
   }
 
   get userId() {
@@ -43,5 +51,9 @@ export class UserDetailsViewStore {
 
   toggleAuditTrailVisible() {
     this.state.auditTrailVisible = !this.state.auditTrailVisible;
+  }
+
+  refresh() {
+    this.userDetailsDataStore.refresh();
   }
 }

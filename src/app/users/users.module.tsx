@@ -8,8 +8,6 @@ import {
 import { UserDetails } from '@/app/users/user-details/user-details';
 import { withLocationStoreProviderHOC } from '@/app/_common/components/location-store-provider/location-store-provider';
 import { provider } from 'react-ioc';
-import { UserFormModal } from '@/app/users/_components/user-form-modal/user-form-modal';
-import { UserFormModalViewStore } from '@/app/users/_components/user-form-modal/user-form-modal.view-store';
 import { AppModule } from '@/app/app.module';
 import { UsersHttpService } from '@/app/users/_common/remote-api/users.http-service';
 import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
@@ -18,7 +16,7 @@ import { UsersDataStore } from '@/app/users/_common/stores/users.data-store';
 // for any src/app/users/**.* files
 
 AppModule.register(UsersHttpService);
-AppModule.register(UsersDataStore);
+// AppModule.register(UsersDataStore);
 
 // Convenient way to provide MobX *LocationStore with useSyncLocationStore() for component which depends on *LocationStore
 const UserDetailsWithLocation = withLocationStoreProviderHOC(
@@ -27,7 +25,7 @@ const UserDetailsWithLocation = withLocationStoreProviderHOC(
 );
 
 const UsersModule = provider(
-  UserFormModalViewStore,
+  UsersDataStore,
   //
 )(
   observer(() => {
@@ -40,8 +38,6 @@ const UsersModule = provider(
             element={<UserDetailsWithLocation />}
           />
         </Routes>
-
-        <UserFormModal />
       </>
     );
   }),
