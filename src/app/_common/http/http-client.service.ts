@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { Observable } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 
 const BASE_URL = '/api';
 
@@ -10,6 +12,10 @@ export class HttpClientService {
     return this.axiosInstance
       .get(path, { params: request })
       .then((r) => r.data);
+  }
+
+  get$<RES>(path: string): Observable<RES> {
+    return ajax.getJSON(BASE_URL + path);
   }
 
   //... other HTTP methods

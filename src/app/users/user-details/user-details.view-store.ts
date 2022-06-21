@@ -10,7 +10,7 @@ export class UserDetailsViewStore {
   private readonly userDetailsDataStore = inject(this, UserDetailsDataStore);
 
   private state = {
-    auditTrailVisible: true,
+    auditTrailVisible: false,
   };
 
   constructor() {

@@ -17,4 +17,10 @@ export class UsersHttpService {
       '/users/' + userId + '/details',
     );
   }
+
+  getUserDetails$(userId: GetUserDetailsRequestJTO) {
+    return this.httpClient.get$<GetUserDetailsResponseJTO>(
+      '/users/' + userId + '/details',
+    );
+  }
 }
