@@ -1,15 +1,22 @@
 import qs from 'qs';
 import { useCallback, useEffect, useRef } from 'react';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable } from 'mobx';
 import { useLocation, useParams } from 'react-router-dom';
 
 export class LocationStore<PROPS extends LocationProps = AnyObject> {
-  private state: State<PROPS> = {
-    params: {},
-    pathname: '',
-    search: '',
-    hash: '',
-  };
+  private state: State<PROPS> = makeAutoObservable(
+    {
+      params: {},
+      pathname: '',
+      search: '',
+      hash: '',
+    },
+    {
+      params: observable.struct,
+      search: observable.struct,
+      hash: observable.struct,
+    },
+  );
 
   constructor() {
     makeAutoObservable(this, undefined, { autoBind: true });
